@@ -10,9 +10,7 @@ SchemaView = get_schema_view(
     permission_classes=(permissions.AllowAny,),
 )
 
-API_V1_URLS = [
-    path('mobile/', include(('api_client.urls', 'pitter_client'), namespace='pitter_client')),
-]
+API_V1_URLS = []
 
 urlpatterns = [  # pylint: disable=invalid-name
     path('api/pitter/v1/', include((API_V1_URLS, 'pitter'), namespace='v1')),
