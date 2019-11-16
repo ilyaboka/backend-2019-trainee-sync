@@ -24,7 +24,7 @@ class ErrorHandlerMiddleware:
         response = self.get_response(request)
         return response
 
-    def process_exception(self, exception) -> Optional[JsonResponse]:  # pylint: disable=no-self-use
+    def process_exception(self, request, exception) -> Optional[JsonResponse]:  # pylint: disable=no-self-use
         """
 
         :param exception:
