@@ -1,5 +1,7 @@
+from base64 import b64encode
 from json import loads
 from os import environ
+
 from requests import post
 
 class GoogleSpeechToText:
@@ -7,10 +9,13 @@ class GoogleSpeechToText:
     GOOGLE_API_KEY: str = environ['GOOGLE_API_KEY']
 
     @classmethod
-    def recognize(cls, audio_base64: str) -> str:
+    def recognize(cls, audio_file: bytes) -> str:
         return loads(
             post(
                 cls.URL, params=dict(key=cls.GOOGLE_API_KEY,),
-                json=dict(audio=dict(content=audio_base64,), config=dict(languageCode='en-US',),)
+                json=dict(
+                    audio=dict(content=b64encode(audio_file).decode(),),
+                    config=dict(languageCode='en-US',),
+                )
             ).text
         )['results'][0]['alternatives'][0]['transcript']

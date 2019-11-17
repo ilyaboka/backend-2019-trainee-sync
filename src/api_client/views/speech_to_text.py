@@ -1,6 +1,7 @@
 from typing import Dict
 
 from drf_yasg.utils import swagger_auto_schema
+from rest_framework.parsers import MultiPartParser
 from rest_framework.views import APIView
 
 from src.api_client.validation_serializers import SpeechToTextPostRequest
@@ -11,6 +12,8 @@ from src.pitter.integrations import GoogleSpeechToText
 
 
 class SpeechToTextView(APIView):
+    parser_classes = [MultiPartParser]
+
     @classmethod
     @request_post_serializer(SpeechToTextPostRequest)
     @response_dict_serializer(SpeechToTextPostResponse)
@@ -24,7 +27,7 @@ class SpeechToTextView(APIView):
             500: exceptions.ExceptionResponse,
         },
         operation_summary='Преобразование речи в текст',
-        operation_description='Преобразование речи в текст с использованием Google Speech-To-Text',
+        operation_description='Преобразование речи (FLAC, WAV) в текст с использованием Google Speech-To-Text',
     )
     def post(cls, request) -> Dict[str, str]:
         """
@@ -33,6 +36,6 @@ class SpeechToTextView(APIView):
         :return:
         """
 
-        recognized_text: str = GoogleSpeechToText.recognize(request.data['speech_base64'])
+        recognized_text: str = GoogleSpeechToText.recognize(request.data['speech_file'].read())
 
         return dict(recognized_text=recognized_text,)
