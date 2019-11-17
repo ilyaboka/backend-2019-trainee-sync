@@ -22,10 +22,12 @@ class GoogleSpeechToText:
         if mime_type not in ['audio/flac', 'audio/x-wav']:
             raise ValidationError(message='Invalid speech file', status_code=415)
 
-        return loads(
+        transcript: str = loads(
             post(
                 cls.URL,
                 params=dict(key=cls.GOOGLE_API_KEY,),
                 json=dict(audio=dict(content=b64encode(audio_file).decode(),), config=config,),
             ).text
         )['results'][0]['alternatives'][0]['transcript']
+
+        return transcript
