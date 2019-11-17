@@ -1,9 +1,9 @@
-from typing import List, Callable
+from typing import Sequence
 
-from .ticket_serializers import TicketPostRequest
-from .ticket_serializers import TicketPostResponse
+from .speech_to_text_serializers import SpeechToTextPostRequest
+from .speech_to_text_serializers import SpeechToTextPostResponse
 
-__all__: List[Callable] = [
-    'TicketPostRequest',
-    'TicketPostResponse',
+__all__: Sequence[str] = [
+    'SpeechToTextPostRequest',
+    'SpeechToTextPostResponse',
 ]

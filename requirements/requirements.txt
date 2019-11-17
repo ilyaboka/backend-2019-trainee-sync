@@ -3,3 +3,5 @@ djangorestframework==3.10.3
 drf-yasg==1.17.0
 PyYAML==5.1.2
 psycopg2-binary==2.8.4
+python-magic==0.4.15
+requests==2.22.0

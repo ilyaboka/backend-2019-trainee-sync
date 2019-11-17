@@ -1,7 +1,7 @@
 from typing import Sequence
 
-from .ticket import TicketMobileView
+from .speech_to_text import SpeechToTextView
 
 __all__: Sequence[str] = [
-    'TicketMobileView',
+    'SpeechToTextView',
 ]
