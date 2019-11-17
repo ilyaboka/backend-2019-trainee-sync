@@ -7,7 +7,8 @@ from rest_framework.views import APIView
 from src.api_client.validation_serializers import SpeechToTextPostRequest
 from src.api_client.validation_serializers import SpeechToTextPostResponse
 from src.pitter import exceptions
-from src.pitter.decorators import request_post_serializer, response_dict_serializer
+from src.pitter.decorators import request_post_serializer
+from src.pitter.decorators import response_dict_serializer
 from src.pitter.integrations import GoogleSpeechToText
 
 

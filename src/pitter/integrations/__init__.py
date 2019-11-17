@@ -1,4 +1,5 @@
-from typing import List, Type
+from typing import List
+from typing import Type
 
 from .google_speech_to_text import GoogleSpeechToText
 

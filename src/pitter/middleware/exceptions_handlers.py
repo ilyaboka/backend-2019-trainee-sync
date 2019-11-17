@@ -8,7 +8,6 @@ from rest_framework.views import exception_handler
 
 from src.pitter.exceptions import exceptions
 
-
 LOGGER = logging.getLogger(__name__)
 
 

@@ -2,8 +2,8 @@ from base64 import b64encode
 from json import loads
 from os import environ
 
-from requests import post
 import magic
+from requests import post
 
 from src.pitter.exceptions import ValidationError
 
