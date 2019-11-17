@@ -24,6 +24,7 @@ class SpeechToTextView(APIView):
             200: SpeechToTextPostResponse,
             401: exceptions.ExceptionResponse,
             404: exceptions.ExceptionResponse,
+            415: exceptions.ExceptionResponse,
             500: exceptions.ExceptionResponse,
         },
         operation_summary='Преобразование речи в текст',
