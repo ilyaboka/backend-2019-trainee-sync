@@ -14,6 +14,7 @@ class GoogleSpeechToText:
 
     @classmethod
     def recognize(cls, audio_file: bytes) -> str:
+        """ Return transcript for speech in audiofile """
         config = dict(languageCode='en-US',)
 
         mime_type = magic.from_buffer(audio_file, mime=True)
