@@ -14,9 +14,9 @@ class Ticket(BaseModel):
     def to_dict(self) -> dict:
         return dict(
             id=self.id,
-            fakeId=self.fake_id,
+            fake_id=self.fake_id,
             message=self.message,
-            userComment=self.user_comment,
+            user_comment=self.user_comment,
         )
 
     @staticmethod
