@@ -4,6 +4,7 @@ from django.db import models
 
 
 def default_uuid_id() -> str:
+    """ Return new uuid """
     return str(uuid.uuid4()).replace('-', '')
 
 
