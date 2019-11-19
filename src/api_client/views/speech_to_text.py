@@ -4,12 +4,12 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework.parsers import MultiPartParser
 from rest_framework.views import APIView
 
-from src.api_client.validation_serializers import SpeechToTextPostRequest
-from src.api_client.validation_serializers import SpeechToTextPostResponse
-from src.pitter import exceptions
-from src.pitter.decorators import request_post_serializer
-from src.pitter.decorators import response_dict_serializer
-from src.pitter.integrations import GoogleSpeechToText
+from api_client.validation_serializers import SpeechToTextPostRequest
+from api_client.validation_serializers import SpeechToTextPostResponse
+from pitter import exceptions
+from pitter.decorators import request_post_serializer
+from pitter.decorators import response_dict_serializer
+from pitter.integrations import GoogleSpeechToText
 
 
 class SpeechToTextView(APIView):

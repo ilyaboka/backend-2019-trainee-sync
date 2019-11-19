@@ -5,7 +5,7 @@ from os import environ
 import magic
 from requests import post
 
-from src.pitter.exceptions import ValidationError
+from pitter.exceptions import ValidationError
 
 
 class GoogleSpeechToText:
