@@ -12,20 +12,11 @@ class Ticket(BaseModel):
     user_comment = models.TextField()
 
     def to_dict(self) -> dict:
-        return dict(
-            id=self.id,
-            fake_id=self.fake_id,
-            message=self.message,
-            user_comment=self.user_comment,
-        )
+        return dict(id=self.id, fake_id=self.fake_id, message=self.message, user_comment=self.user_comment,)
 
     @staticmethod
     def create_ticket(fake_id: str, message: str, user_comment: str) -> Ticket:
-        return Ticket.objects.create(
-            fake_id=fake_id,
-            message=message,
-            user_comment=user_comment,
-        )
+        return Ticket.objects.create(fake_id=fake_id, message=message, user_comment=user_comment,)
 
     @staticmethod
     def get_tickets() -> QuerySet:
