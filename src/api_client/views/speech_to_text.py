@@ -37,7 +37,6 @@ class SpeechToTextView(APIView):
         :param request:
         :return:
         """
+        recognized_text: str = GoogleSpeechToText.recognize(request.data['speechFile'].read())
 
-        recognized_text: str = GoogleSpeechToText.recognize(request.data['speech_file'].read())
-
-        return dict(recognized_text=recognized_text,)
+        return dict(recognizedText=recognized_text,)
