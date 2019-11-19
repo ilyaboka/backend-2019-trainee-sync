@@ -1,6 +1,7 @@
 from base64 import b64encode
 from json import loads
 from os import environ
+from typing import Optional
 
 from requests import Response
 from requests.exceptions import RequestException
@@ -10,13 +11,20 @@ from pitter.exceptions import PitterException
 
 
 class GoogleSpeechToTextException(PitterException):
-    def __init__(self, message=None, title=None, payload=None, status_code=None):
-        detail = message if message else self.default_detail
-        exception_code = self.__class__.__name__
-        self.default_detail = message if message else self.default_detail
-        self.status_code = status_code if status_code else 500
-        self.title = title
-        self.payload = payload
+    def __init__(
+        # pylint: disable=C0330
+        self,
+        message: Optional[str] = None,
+        title: Optional[str] = None,
+        payload: Optional[str] = None,
+        status_code: Optional[int] = None,
+    ) -> None:
+        # pylint: enable=C0330
+        detail: str = message if message else self.default_detail
+        exception_code: str = self.__class__.__name__
+        self.status_code: int = status_code if status_code else 500
+        self.title: Optional[str] = title
+        self.payload: Optional[str] = payload
         super().__init__(detail, exception_code)
 
 
@@ -28,7 +36,8 @@ class GoogleSpeechToText:
     def get_transcript_from_responce(responce: Response) -> str:
         """ Get transcript text from Google REST API Responce """
         try:
-            return loads(responce.text)['results'][0]['alternatives'][0]['transcript']
+            transcript: str = loads(responce.text)['results'][0]['alternatives'][0]['transcript']
+            return transcript
         except KeyError as key_error:
             raise GoogleSpeechToTextException(responce.text) from key_error
 
