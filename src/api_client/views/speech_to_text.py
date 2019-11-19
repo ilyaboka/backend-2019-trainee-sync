@@ -2,6 +2,7 @@ from typing import Dict
 
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.parsers import MultiPartParser
+from rest_framework.request import Request
 from rest_framework.views import APIView
 
 from api_client.validation_serializers import SpeechToTextPostRequest
@@ -31,13 +32,12 @@ class SpeechToTextView(APIView):
         operation_summary='Преобразование речи в текст',
         operation_description='Преобразование речи (FLAC, WAV) в текст с использованием Google Speech-To-Text',
     )
-    def post(cls, request) -> Dict[str, str]:
+    def post(cls, request: Request) -> Dict[str, str]:
         """
         Преобразование речи в текст с использованием Google Speech-To-Text
         :param request:
         :return:
         """
+        recognized_text: str = GoogleSpeechToText.recognize(request.data['speechFile'].read())
 
-        recognized_text: str = GoogleSpeechToText.recognize(request.data['speech_file'].read())
-
-        return dict(recognized_text=recognized_text,)
+        return dict(recognizedText=recognized_text,)
