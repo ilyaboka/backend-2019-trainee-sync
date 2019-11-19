@@ -2,11 +2,14 @@ version: '3.7'
 services:
   pitter_sync:
     build: .
+    command: src/manage.py runserver
     env_file:
       - local.env
     depends_on:
       - redis
       - postgresql
+    ports:
+      - 8000:8000
   redis:
     image: redis
     command: redis-server --appendonly yes
