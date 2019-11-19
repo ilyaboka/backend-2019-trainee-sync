@@ -39,6 +39,12 @@ class TicketMobileView(APIView):
         user_comment: str = request.data['userComment']
         fake_id: str = str(uuid4())
 
-        result = Ticket.create_ticket(fake_id=fake_id, message=message, user_comment=user_comment,)
+        result: Ticket = Ticket.create_ticket(fake_id=fake_id, message=message, user_comment=user_comment,)
+        result_dict: dict = result.to_dict()
 
-        return result.to_dict()
+        return dict(
+            id=result_dict["id"],
+            fakeId=result_dict["fake_id"],
+            message=result_dict["message"],
+            userComment=result_dict["user_comment"],
+        )
