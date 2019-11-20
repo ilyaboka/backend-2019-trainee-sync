@@ -2,6 +2,7 @@ from typing import Dict
 from uuid import uuid4
 
 from drf_yasg.utils import swagger_auto_schema
+from rest_framework.request import Request
 from rest_framework.views import APIView
 
 from api_client.validation_serializers import TicketPostRequest
@@ -28,7 +29,7 @@ class TicketMobileView(APIView):
         operation_summary='Создание заявки',
         operation_description='Создание заявки в сервисе Pitter',
     )
-    def post(cls, request) -> Dict[str, str]:
+    def post(cls, request: Request) -> Dict[str, str]:
         """
         Создание заявки клиентом
         :param request:
