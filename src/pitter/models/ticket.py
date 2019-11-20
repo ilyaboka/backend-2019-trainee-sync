@@ -19,7 +19,9 @@ class Ticket(BaseModel):
     @staticmethod
     def create_ticket(fake_id: str, message: str, user_comment: str) -> Ticket:
         """Create new ticket"""
-        new_ticket: Ticket = Ticket.objects.create(fake_id=fake_id, message=message, user_comment=user_comment,)
+        new_ticket: Ticket = Ticket.objects.create(
+            fake_id=fake_id, message=message, user_comment=user_comment,
+        )
         return new_ticket
 
     @staticmethod
