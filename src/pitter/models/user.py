@@ -15,7 +15,7 @@ class User(BaseModel):
     PBKDF2_HMAC_HASH_NAME: str = 'sha256'
     PBKDF2_HMAC_NUMBER_OF_ITERATIONS: int = int(1e5)
 
-    login = models.CharField(max_length=32)
+    login = models.CharField(max_length=32, unique=True)
     hash_of_password_with_salt = models.BinaryField(max_length=32)
     salt_for_password = models.BinaryField(max_length=SALT_FOR_PASSWORD_LENGTH)
     email_address = models.CharField(max_length=254, blank=True)
