@@ -1,3 +1,4 @@
+from http import HTTPStatus
 from typing import Dict
 from uuid import uuid4
 
@@ -21,20 +22,14 @@ class TicketMobileView(APIView):
         tags=['Pitter: mobile'],
         request_body=TicketPostRequest,
         responses={
-            200: TicketPostResponse,
-            401: exceptions.ExceptionResponse,
-            404: exceptions.ExceptionResponse,
-            500: exceptions.ExceptionResponse,
+            HTTPStatus.OK.value: TicketPostResponse,
+            HTTPStatus.INTERNAL_SERVER_ERROR.value: exceptions.ExceptionResponse,
         },
         operation_summary='Создание заявки',
         operation_description='Создание заявки в сервисе Pitter',
     )
     def post(cls, request: Request) -> Dict[str, str]:
-        """
-        Создание заявки клиентом
-        :param request:
-        :return:
-        """
+        """Создание заявки клиентом"""
 
         message: str = request.data['message']
         user_comment: str = request.data['userComment']

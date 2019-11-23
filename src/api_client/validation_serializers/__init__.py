@@ -1,17 +1,19 @@
 from typing import Sequence
 
-from .delete_account_serializers import DeleteAccountPostRequest
-from .speech_to_text_serializers import SpeechToTextPostRequest
-from .speech_to_text_serializers import SpeechToTextPostResponse
-from .sign_up_serializers import SignUpPostRequest
+from .account_serializers import AccountDeleteRequest
+from .recognize_serializers import RecognizePostRequest
+from .recognize_serializers import RecognizePostResponse
+from .signup_serializers import SignUpPostRequest
+from .signup_serializers import SignUpPostResponse
 from .ticket_serializers import TicketPostRequest
 from .ticket_serializers import TicketPostResponse
 
 __all__: Sequence[str] = [
-    'DeleteAccountPostRequest',
-    'SpeechToTextPostRequest',
-    'SpeechToTextPostResponse',
+    'AccountDeleteRequest',
+    'RecognizePostRequest',
+    'RecognizePostResponse',
     'SignUpPostRequest',
+    'SignUpPostResponse',
     'TicketPostRequest',
     'TicketPostResponse',
 ]

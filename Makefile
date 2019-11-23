@@ -8,7 +8,7 @@ down:
 lint:
 	pip install -r requirements/dev-requirements.txt
 	flake8 src
-	pylint src
+	PYTHONPATH=src/ pylint src
 	mypy src
 
 format:

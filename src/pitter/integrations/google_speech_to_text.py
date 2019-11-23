@@ -1,6 +1,6 @@
 from base64 import b64encode
+from http import HTTPStatus
 from json import loads
-from os import environ
 from typing import Optional
 
 from requests import Response
@@ -8,30 +8,29 @@ from requests.exceptions import RequestException
 from requests import post
 
 from pitter.exceptions import PitterException
+from pitter.settings import GOOGLE_API_KEY
+from pitter.settings import GOOGLE_SPEECH_TO_TEXT_URL
 
 
 class GoogleSpeechToTextException(PitterException):
     def __init__(
-        # pylint: disable=C0330
+        # pylint: disable=bad-continuation
         self,
         message: Optional[str] = None,
         title: Optional[str] = None,
         payload: Optional[str] = None,
         status_code: Optional[int] = None,
     ) -> None:
-        # pylint: enable=C0330
+        # pylint: enable=bad-continuation
         detail: str = message if message else self.default_detail
         exception_code: str = self.__class__.__name__
-        self.status_code: int = status_code if status_code else 500
+        self.status_code: int = status_code if status_code else HTTPStatus.INTERNAL_SERVER_ERROR.value
         self.title: Optional[str] = title
         self.payload: Optional[str] = payload
         super().__init__(detail, exception_code)
 
 
 class GoogleSpeechToText:
-    URL: str = 'https://speech.googleapis.com/v1/speech:recognize'
-    GOOGLE_API_KEY: str = environ['GOOGLE_API_KEY']
-
     @staticmethod
     def get_transcript_from_responce(responce: Response) -> str:
         """ Get transcript text from Google REST API Responce """
@@ -47,8 +46,8 @@ class GoogleSpeechToText:
         try:
             return cls.get_transcript_from_responce(
                 post(
-                    cls.URL,
-                    params=dict(key=cls.GOOGLE_API_KEY,),
+                    GOOGLE_SPEECH_TO_TEXT_URL,
+                    params=dict(key=GOOGLE_API_KEY,),
                     json=dict(
                         audio=dict(content=b64encode(audio_file).decode('ascii'),), config=dict(languageCode='en-US',),
                     ),

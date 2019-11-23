@@ -1,35 +1,33 @@
 import logging
 import traceback
+from typing import Any
+from typing import Callable
+from typing import Dict
 from typing import Optional
 
 from django.conf import settings
 from django.http import JsonResponse
+from django.http.request import HttpRequest
 from rest_framework.views import exception_handler
 
 from pitter.exceptions import exceptions
 
-LOGGER = logging.getLogger(__name__)
+LOGGER: logging.Logger = logging.getLogger(__name__)
 
 
 class ErrorHandlerMiddleware:
-    """
-    Class docstring
-    """
-
-    def __init__(self, get_response):
+    def __init__(self, get_response: Callable):
+        """Создать новый ErrorHandlerMiddleware"""
         self.get_response = get_response
 
-    def __call__(self, request):
+    def __call__(self, request: HttpRequest) -> HttpRequest:
+        """Обработать запрос"""
         response = self.get_response(request)
         return response
 
-    def process_exception(self, request, exception) -> Optional[JsonResponse]:
+    def process_exception(self, request: HttpRequest, exception: Exception) -> Optional[JsonResponse]:
         # pylint: disable=no-self-use,unused-argument
-        """
-
-        :param exception:
-        :return:
-        """
+        """Вернуть JsonResponse или None из exception"""
         if not isinstance(exception, exceptions.PitterException):
             LOGGER.exception(traceback.format_exc())
             return JsonResponse(
@@ -44,13 +42,8 @@ class ErrorHandlerMiddleware:
         return None
 
 
-def custom_exception_handler(exception, context):
-    """
-
-    :param exception:
-    :param context:
-    :return:
-    """
+def custom_exception_handler(exception: exceptions.ValidationError, context: Dict[str, Any]) -> HttpRequest:
+    """Обработчик ошибок"""
     response = exception_handler(exception, context)
 
     if settings.DEBUG:
