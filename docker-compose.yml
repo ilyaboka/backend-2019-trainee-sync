@@ -2,7 +2,6 @@ version: '3.7'
 services:
   pitter_sync:
     build: .
-    command: src/manage.py runserver
     env_file:
       - local.env
     depends_on:
@@ -13,16 +12,12 @@ services:
   redis:
     image: redis
     command: redis-server --appendonly yes
-    ports:
-      - 6379:6379
   postgresql:
     image: postgres
     environment:
       POSTGRES_PASSWORD: 'postgres'
     volumes:
       - pitter_sync_postgresql:/var/lib/postgresql
-    ports:
-      - 5432:5432
 
 volumes:
   pitter_sync_postgresql:
