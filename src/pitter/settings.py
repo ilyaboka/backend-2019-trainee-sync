@@ -106,3 +106,7 @@ SWAGGER_SETTINGS = {
         'X-Device-Info': {'type': 'apiKey', 'name': 'X-Device-Info', 'in': 'header'},
     },
 }
+
+GOOGLE_API_KEY: str = os.environ['GOOGLE_API_KEY']
+
+GOOGLE_SPEECH_TO_TEXT_URL: str = 'https://speech.googleapis.com/v1/speech:recognize'
