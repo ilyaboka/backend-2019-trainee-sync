@@ -1,5 +1,7 @@
 from __future__ import annotations
+
 from hashlib import pbkdf2_hmac
+from http import HTTPStatus
 from os import urandom
 from typing import Dict
 from typing import Union
@@ -7,6 +9,7 @@ from typing import Union
 from django.db import models
 from django.db.models import QuerySet
 
+from pitter.exceptions import PitterException
 from pitter.models.base import BaseModel
 
 
@@ -22,8 +25,50 @@ class User(BaseModel):
     email_notifications_enabled = models.BooleanField()
     name = models.CharField(max_length=32, blank=True)
 
+    @classmethod
+    def create_user(cls, login: str, password: str) -> User:
+        """Создать нового пользователя"""
+        salt_for_password = urandom(cls.SALT_FOR_PASSWORD_LENGTH)
+        try:
+            new_user: User = User.objects.create(
+                login=login,
+                hash_of_password_with_salt=pbkdf2_hmac(
+                    cls.PBKDF2_HMAC_HASH_NAME,
+                    password.encode(),
+                    salt_for_password,
+                    cls.PBKDF2_HMAC_NUMBER_OF_ITERATIONS,
+                ),
+                salt_for_password=salt_for_password,
+                email_notifications_enabled=False,
+            )
+        except UnicodeError as unicode_error:
+            raise PitterException(
+                'Error while encoding string', HTTPStatus.INTERNAL_SERVER_ERROR.value
+            ) from unicode_error
+        return new_user
+
+    @staticmethod
+    def get_users() -> QuerySet:
+        """Получить всех пользователей"""
+        return User.objects.find().order_by('created_at')
+
+    def has_password(self, password: str) -> bool:
+        """Проверить пароль пользователя"""
+        try:
+            equals: bool = pbkdf2_hmac(
+                self.PBKDF2_HMAC_HASH_NAME,
+                password.encode(),
+                self.salt_for_password,
+                self.PBKDF2_HMAC_NUMBER_OF_ITERATIONS,
+            ) == self.hash_of_password_with_salt.tobytes()  # pylint: disable=no-member
+            return equals
+        except UnicodeError as unicode_error:
+            raise PitterException(
+                'Error while encoding string', HTTPStatus.INTERNAL_SERVER_ERROR.value
+            ) from unicode_error
+
     def to_dict(self) -> Dict[str, Union[bool, bytes, str]]:
-        """Return dict containig data"""
+        """Вернуть словарь с данными"""
         return dict(
             id=self.id,
             login=self.login,
@@ -33,22 +78,3 @@ class User(BaseModel):
             email_notifications_enabled=self.email_notifications_enabled,
             name=self.name,
         )
-
-    @classmethod
-    def create_user(cls, login: str, password: str) -> User:
-        """Create new user"""
-        salt_for_password = urandom(cls.SALT_FOR_PASSWORD_LENGTH)
-        new_user: User = User.objects.create(
-            login=login,
-            hash_of_password_with_salt=pbkdf2_hmac(
-                cls.PBKDF2_HMAC_HASH_NAME, password.encode(), salt_for_password, cls.PBKDF2_HMAC_NUMBER_OF_ITERATIONS
-            ),
-            salt_for_password=salt_for_password,
-            email_notifications_enabled=False,
-        )
-        return new_user
-
-    @staticmethod
-    def get_users() -> QuerySet:
-        """Get all users"""
-        return User.objects.find().order_by('created_at')

@@ -11,7 +11,7 @@ from api_client.validation_serializers import RecognizePostResponse
 from pitter import exceptions
 from pitter.decorators import request_post_serializer
 from pitter.decorators import response_dict_serializer
-from pitter.integrations import GoogleSpeechToText
+from pitter.utils import recognize
 
 
 class RecognizeView(APIView):
@@ -24,14 +24,14 @@ class RecognizeView(APIView):
         request_body=RecognizePostRequest,
         responses={
             HTTPStatus.OK.value: RecognizePostResponse,
+            HTTPStatus.BAD_REQUEST.value: exceptions.ExceptionResponse,
+            HTTPStatus.UNPROCESSABLE_ENTITY.value: exceptions.ExceptionResponse,
             HTTPStatus.UNSUPPORTED_MEDIA_TYPE.value: exceptions.ExceptionResponse,
             HTTPStatus.INTERNAL_SERVER_ERROR.value: exceptions.ExceptionResponse,
         },
         operation_summary='Преобразование речи в текст',
-        operation_description='Преобразование речи (FLAC, WAV) в текст с использованием Google Speech-To-Text',
+        operation_description='Преобразование речи (FLAC, WAV) в текст с использованием асинхронного сервиса',
     )
     def post(cls, request: Request) -> Dict[str, str]:
-        """Преобразование речи в текст с использованием Google Speech-To-Text"""
-        recognized_text: str = GoogleSpeechToText.recognize(request.data['speechFile'].read())
-
-        return dict(recognizedText=recognized_text,)
+        """Преобразование речи в текст с использованием асинхронного сервиса"""
+        return dict(recognizedText=recognize(request.data['speechFile'].read()),)

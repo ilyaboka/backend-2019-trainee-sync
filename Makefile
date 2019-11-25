@@ -14,7 +14,7 @@ lint:
 format:
 	pip install -r requirements/dev-requirements.txt
 	black --verbose --config black.toml src
-	isort src/**/*.py
+	isort --recursive src --skip src/pitter/migrations
 
 test:
 	pip install -r requirements/dev-requirements.txt
