@@ -4,11 +4,8 @@ import os
 import sys
 
 
-def main():  # type: ignore
-    """
-
-    :rtype: object
-    """
+def main() -> None:
+    """Run django command-line utility"""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'pitter.settings')
     try:
         from django.core.management import execute_from_command_line  # pylint: disable=import-outside-toplevel
@@ -22,4 +19,4 @@ def main():  # type: ignore
 
 
 if __name__ == '__main__':
-    main()  # type: ignore
+    main()

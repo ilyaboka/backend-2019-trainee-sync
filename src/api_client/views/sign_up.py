@@ -32,10 +32,14 @@ class SignUpView(APIView):
     )
     def post(cls, request: Request) -> HttpResponse:
         """Создание аккаунта"""
+        login: str = request.data['login']
+        password: str = request.data['password']
+
         try:
-            user = User.create_user(login=request.data['login'], password=request.data['password'])
-            return dict(id=user.id, login=user.login,)
+            user = User.create_user(login=login, password=password)
         except IntegrityError as integrity_error:
             raise exceptions.ValidationError(
                 'Login already in use', status_code=HTTPStatus.CONFLICT.value
             ) from integrity_error
+
+        return dict(id=user.id, login=user.login,)

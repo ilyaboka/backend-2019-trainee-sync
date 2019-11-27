@@ -34,22 +34,27 @@ class SignInView(APIView):
     )
     def post(cls, request: Request) -> HttpResponse:
         """Вход в систему, получение JWT"""
+        login: str = request.data['login']
+
         try:
-            user: User = User.objects.get(login=request.data['login'])
-            if user.has_password(request.data['password']):
-                return dict(
-                    token=encode(
-                        dict(exp=datetime.utcnow() + JSON_WEB_TOKEN_LIFETIME, id=user.id,),
-                        JSON_WEB_TOKEN_PRIVATE_KEY,
-                        algorithm='RS256',
-                    ).decode('ascii'),
-                )
-            raise exceptions.ValidationError('Invalid credentials', status_code=HTTPStatus.BAD_REQUEST.value)
+            user: User = User.objects.get(login=login)
         except User.DoesNotExist as does_not_exist:
             raise exceptions.ValidationError(
                 'Invalid credentials', status_code=HTTPStatus.BAD_REQUEST.value
             ) from does_not_exist
+
+        if not user.has_password(request.data['password']):
+            raise exceptions.ValidationError('Invalid credentials', status_code=HTTPStatus.BAD_REQUEST.value)
+
+        token_bytes: bytes = encode(
+            dict(exp=datetime.utcnow() + JSON_WEB_TOKEN_LIFETIME, id=user.id,),
+            JSON_WEB_TOKEN_PRIVATE_KEY,
+            algorithm='RS256',
+        )
+
+        try:
+            token_string = token_bytes.decode('ascii')
         except UnicodeError as unicode_error:
-            raise exceptions.PitterException(
-                'Something went wrong', 'Server Error', status_code=HTTPStatus.INTERNAL_SERVER_ERROR.value
-            ) from unicode_error
+            raise exceptions.PitterException('Something went wrong', 'Server Error',) from unicode_error
+
+        return dict(token=token_string)

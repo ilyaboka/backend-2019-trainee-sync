@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from hashlib import pbkdf2_hmac
-from http import HTTPStatus
 from os import urandom
 from typing import Dict
 from typing import Union
@@ -28,23 +27,20 @@ class User(BaseModel):
     @classmethod
     def create_user(cls, login: str, password: str) -> User:
         """Создать нового пользователя"""
-        salt_for_password = urandom(cls.SALT_FOR_PASSWORD_LENGTH)
         try:
-            new_user: User = User.objects.create(
-                login=login,
-                hash_of_password_with_salt=pbkdf2_hmac(
-                    cls.PBKDF2_HMAC_HASH_NAME,
-                    password.encode(),
-                    salt_for_password,
-                    cls.PBKDF2_HMAC_NUMBER_OF_ITERATIONS,
-                ),
-                salt_for_password=salt_for_password,
-                email_notifications_enabled=False,
-            )
+            password_bytes = password.encode()
         except UnicodeError as unicode_error:
-            raise PitterException(
-                'Error while encoding string', HTTPStatus.INTERNAL_SERVER_ERROR.value
-            ) from unicode_error
+            raise PitterException('Error while encoding string', 'ServerError') from unicode_error
+
+        salt_for_password = urandom(cls.SALT_FOR_PASSWORD_LENGTH)
+        new_user: User = User.objects.create(
+            login=login,
+            hash_of_password_with_salt=pbkdf2_hmac(
+                cls.PBKDF2_HMAC_HASH_NAME, password_bytes, salt_for_password, cls.PBKDF2_HMAC_NUMBER_OF_ITERATIONS,
+            ),
+            salt_for_password=salt_for_password,
+            email_notifications_enabled=False,
+        )
         return new_user
 
     @staticmethod
@@ -55,17 +51,13 @@ class User(BaseModel):
     def has_password(self, password: str) -> bool:
         """Проверить пароль пользователя"""
         try:
-            equals: bool = pbkdf2_hmac(
-                self.PBKDF2_HMAC_HASH_NAME,
-                password.encode(),
-                self.salt_for_password,
-                self.PBKDF2_HMAC_NUMBER_OF_ITERATIONS,
-            ) == self.hash_of_password_with_salt.tobytes()  # pylint: disable=no-member
-            return equals
+            password_bytes = password.encode()
         except UnicodeError as unicode_error:
-            raise PitterException(
-                'Error while encoding string', HTTPStatus.INTERNAL_SERVER_ERROR.value
-            ) from unicode_error
+            raise PitterException('Error while encoding string', 'ServerError') from unicode_error
+        equals: bool = pbkdf2_hmac(
+            self.PBKDF2_HMAC_HASH_NAME, password_bytes, self.salt_for_password, self.PBKDF2_HMAC_NUMBER_OF_ITERATIONS,
+        ) == self.hash_of_password_with_salt.tobytes()  # pylint: disable=no-member
+        return equals
 
     def to_dict(self) -> Dict[str, Union[bool, bytes, str]]:
         """Вернуть словарь с данными"""

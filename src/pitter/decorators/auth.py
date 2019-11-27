@@ -2,6 +2,7 @@ import functools
 from http import HTTPStatus
 from typing import Any
 from typing import Callable
+from typing import Dict
 from typing import List
 
 from django.views.generic.base import View
@@ -21,27 +22,39 @@ def access_token_required(handler: Callable[..., Response]) -> Callable[..., Res
     @functools.wraps(handler)
     def _wraper(view: View, request: Request, *args: Any, **kwargs: Any) -> Response:
         try:
-            auth: List[str] = request.META['HTTP_AUTHORIZATION'].split()
+            authorization: str = request.META['HTTP_AUTHORIZATION']
         except KeyError as key_error:
             raise ValidationError(
                 'Authorization header expected', status_code=HTTPStatus.UNAUTHORIZED.value
             ) from key_error
-        if auth[0] != 'Bearer':
+
+        authorization_parts: List[str] = authorization.split()
+        if len(authorization_parts) != 2:
+            raise ValidationError(
+                'Invalid Authorization header: two parts expected', status_code=HTTPStatus.UNAUTHORIZED.value
+            )
+
+        if authorization_parts[0] != 'Bearer':
             raise ValidationError(
                 'Invalid authorization type: Bearer expected', status_code=HTTPStatus.UNAUTHORIZED.value
             )
+
+        token: str = authorization_parts[1]
+
         try:
-            user_id: str = decode(auth[1], JSON_WEB_TOKEN_PUBLIC_KEY, algorithms=['RS256'])['id']
-        except IndexError as index_error:
-            raise ValidationError(
-                'Invalid Authorization header', status_code=HTTPStatus.UNAUTHORIZED.value
-            ) from index_error
+            payload: Dict[str, Any] = decode(token, JSON_WEB_TOKEN_PUBLIC_KEY, algorithms=['RS256'])
         except ExpiredSignatureError as expire_signature_error:
             raise ValidationError(
                 'Token expired', status_code=HTTPStatus.UNAUTHORIZED.value
             ) from expire_signature_error
-        except (InvalidTokenError, KeyError) as exception:
-            raise ValidationError('Invalid token', status_code=HTTPStatus.UNAUTHORIZED.value) from exception
+        except InvalidTokenError as invalid_token_error:
+            raise ValidationError('Invalid token', status_code=HTTPStatus.UNAUTHORIZED.value) from invalid_token_error
+
+        try:
+            user_id: str = payload['id']
+        except KeyError as key_error:
+            raise ValidationError('Invalid token', status_code=HTTPStatus.UNAUTHORIZED.value) from key_error
+
         return handler(view, user_id, request, *args, **kwargs)
 
     return _wraper
