@@ -16,11 +16,11 @@ LOGGER: logging.Logger = logging.getLogger(__name__)
 
 
 class ErrorHandlerMiddleware:
-    def __init__(self, get_response: Callable):
+    def __init__(self, get_response: Callable[[HttpRequest], HttpResponse]):
         """Создать новый ErrorHandlerMiddleware"""
         self.get_response = get_response
 
-    def __call__(self, request: HttpRequest) -> HttpRequest:
+    def __call__(self, request: HttpRequest) -> HttpResponse:
         """Обработать запрос"""
         response = self.get_response(request)
         return response
