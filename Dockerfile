@@ -12,7 +12,9 @@ WORKDIR ${APP_ROOT}
 
 RUN mkdir /config
 
-COPY docker-entrypoint.sh /usr/local/bin
+COPY docker-entrypoint.sh /usr/local/bin/
+
+ADD token_keys ${APP_ROOT}/token_keys/
 
 ADD requirements /config/
 RUN pip install --no-cache-dir -U -r /config/internal-requirements.txt && rm /config/internal-requirements.txt
