@@ -26,7 +26,7 @@ class AccountView(APIView):
     def delete(cls, user_id: str, request: Request) -> HttpResponse:
         """Удаление пользовательского аккаунта"""
         try:
-            user = User.objects.get(id=user_id)
+            user: User = User.objects.get(id=user_id)
         except User.DoesNotExist:
             raise exceptions.ValidationError('User not found', status_code=HTTPStatus.NOT_FOUND.value)
 
