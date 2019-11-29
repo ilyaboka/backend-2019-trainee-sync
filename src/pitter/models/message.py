@@ -1,13 +1,12 @@
 from __future__ import annotations
-from sys import stderr
+
 from typing import Dict
 
 from django.db import models
 from django.db.models import QuerySet
 
 from pitter.models.base import BaseModel
-from pitter.integrations import GoogleSpeechToText
-from pitter.integrations import GoogleSpeechToTextException
+from pitter.utils import recognize
 
 
 class Message(BaseModel):
@@ -28,10 +27,7 @@ class Message(BaseModel):
     def create_message(user: str, speech_audio_file_path: str) -> Message:
         """Create new message"""
         speech_transcript = None
-        try:
-            speech_transcript = GoogleSpeechToText.recognize(open(speech_audio_file_path).read())
-        except GoogleSpeechToTextException:
-            print(GoogleSpeechToTextException, file=stderr)
+        speech_transcript = recognize(open(speech_audio_file_path).read())
         new_message: Message = Message.objects.create(
             user=user, speech_audio_file_path=speech_audio_file_path, speech_transcript=speech_transcript,
         )

@@ -9,8 +9,8 @@ from rest_framework.views import APIView
 from api_client.validation_serializers import TicketPostRequest
 from api_client.validation_serializers import TicketPostResponse
 from pitter import exceptions
-from pitter.decorators import request_post_serializer, response_dict_serializer
-
+from pitter.decorators import request_post_serializer
+from pitter.decorators import response_dict_serializer
 from pitter.models.ticket import Ticket
 
 
@@ -23,6 +23,8 @@ class TicketMobileView(APIView):
         request_body=TicketPostRequest,
         responses={
             HTTPStatus.OK.value: TicketPostResponse,
+            HTTPStatus.BAD_REQUEST.value: exceptions.ExceptionResponse,
+            HTTPStatus.UNPROCESSABLE_ENTITY.value: exceptions.ExceptionResponse,
             HTTPStatus.INTERNAL_SERVER_ERROR.value: exceptions.ExceptionResponse,
         },
         operation_summary='Создание заявки',

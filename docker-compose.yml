@@ -1,10 +1,20 @@
 version: '3.7'
 services:
+  pitter_async:
+    build: ../backend-2019-trainee-async
+    env_file:
+      - ../backend-2019-trainee-async/local.env
+    depends_on:
+      - redis
+      - postgresql
+    ports:
+      - 8118:8118
   pitter_sync:
     build: .
     env_file:
       - local.env
     depends_on:
+      - pitter_async
       - redis
       - postgresql
     ports:

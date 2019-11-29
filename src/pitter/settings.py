@@ -1,4 +1,5 @@
 import os
+from datetime import timedelta
 from typing import List
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -30,6 +31,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'pitter.middleware.ErrorHandlerMiddleware',
+    'pitter.middleware.AuthorizationMiddleware',
 ]
 
 ROOT_URLCONF = 'pitter.urls'
@@ -107,6 +109,10 @@ SWAGGER_SETTINGS = {
     },
 }
 
-GOOGLE_API_KEY: str = os.environ['GOOGLE_API_KEY']
+ASYNCHRONOUS_SERVICE_URL = 'http://pitter_async:8118/api/pitter/v1/recognize'
 
-GOOGLE_SPEECH_TO_TEXT_URL: str = 'https://speech.googleapis.com/v1/speech:recognize'
+JSON_WEB_TOKEN_LIFETIME = timedelta(hours=1)
+
+JSON_WEB_TOKEN_PRIVATE_KEY = open('token_keys/id_rsa', 'rb').read()
+
+JSON_WEB_TOKEN_PUBLIC_KEY = open('token_keys/id_rsa.pub', 'rb').read()

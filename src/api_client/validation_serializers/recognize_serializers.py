@@ -1,7 +1,7 @@
 from http import HTTPStatus
 
-from django.core.files.uploadedfile import UploadedFile
 import magic
+from django.core.files.uploadedfile import UploadedFile
 from rest_framework import serializers
 
 from pitter.exceptions import ValidationError
@@ -9,7 +9,9 @@ from pitter.exceptions import ValidationError
 
 class RecognizePostRequest(serializers.Serializer):
     MAXIMAL_MAGIC_BYTE_LENGTH_FOR_ACCEPTED_FILETYPES: int = 12
-    speechFile: serializers.FileField = serializers.FileField(required=True)
+    speechFile: serializers.FileField = serializers.FileField(
+        required=True, label='Аудиофайл, содержащий речь для распознования'
+    )
 
     @classmethod
     def validate_speechFile(cls, speech_file: UploadedFile) -> None:  # pylint: disable=invalid-name

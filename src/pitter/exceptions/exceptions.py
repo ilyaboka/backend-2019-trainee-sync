@@ -1,8 +1,12 @@
+import traceback
 from http import HTTPStatus
 from typing import Optional
 
+from django.http import JsonResponse
 from rest_framework import serializers
 from rest_framework.exceptions import APIException
+
+from pitter import settings
 
 
 class ExceptionResponse(serializers.Serializer):
@@ -35,6 +39,14 @@ class PitterException(APIException):
         """Вернуть serializer для исключений"""
         return ExceptionResponse
 
+    def make_response(self) -> JsonResponse:
+        """Создать response"""
+        json_response: JsonResponse = JsonResponse(
+            dict(code=self.get_codes(), message=str(self), debug=traceback.format_exc() if settings.DEBUG else None),
+            status=self.status_code,
+        )
+        return json_response
+
 
 class ValidationError(PitterException):
     default_detail = 'Validation error'
@@ -51,8 +63,18 @@ class ValidationError(PitterException):
         """Создать новое исключение"""
         detail: str = message if message else self.default_detail
         exception_code: str = self.__class__.__name__
-        self.default_detail = message if message else self.default_detail
         self.status_code = status_code if status_code else HTTPStatus.UNPROCESSABLE_ENTITY
         self.title = title
         self.payload = payload
+        super().__init__(detail, exception_code, self.status_code)
+
+
+class AuthorizationError(PitterException):
+    default_detail = 'Authorization error'
+    status_code = HTTPStatus.UNAUTHORIZED
+
+    def __init__(self, message: Optional[str] = None) -> None:
+        """Создать новое исключение"""
+        detail: str = message if message else self.default_detail
+        exception_code: str = self.__class__.__name__
         super().__init__(detail, exception_code, self.status_code)

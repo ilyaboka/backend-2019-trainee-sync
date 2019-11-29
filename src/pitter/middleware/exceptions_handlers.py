@@ -6,6 +6,7 @@ from typing import Dict
 from typing import Optional
 
 from django.conf import settings
+from django.http import HttpResponse
 from django.http import JsonResponse
 from django.http.request import HttpRequest
 from rest_framework.views import exception_handler
@@ -16,13 +17,13 @@ LOGGER: logging.Logger = logging.getLogger(__name__)
 
 
 class ErrorHandlerMiddleware:
-    def __init__(self, get_response: Callable):
+    def __init__(self, get_response: Callable[[HttpRequest], HttpResponse]):
         """Создать новый ErrorHandlerMiddleware"""
         self.get_response = get_response
 
-    def __call__(self, request: HttpRequest) -> HttpRequest:
-        """Обработать запрос"""
-        response = self.get_response(request)
+    def __call__(self, request: HttpRequest) -> HttpResponse:
+        """Выполнить запрос"""
+        response: HttpResponse = self.get_response(request)
         return response
 
     def process_exception(self, request: HttpRequest, exception: Exception) -> Optional[JsonResponse]:
@@ -42,7 +43,7 @@ class ErrorHandlerMiddleware:
         return None
 
 
-def custom_exception_handler(exception: exceptions.ValidationError, context: Dict[str, Any]) -> HttpRequest:
+def custom_exception_handler(exception: exceptions.PitterException, context: Dict[str, Any]) -> HttpRequest:
     """Обработчик ошибок"""
     response = exception_handler(exception, context)
 
