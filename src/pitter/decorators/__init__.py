@@ -1,6 +1,6 @@
 from typing import Sequence
 
-from .auth import access_token_required
+from .authorization import access_token_required
 from .view_validation import request_post_serializer
 from .view_validation import response_dict_serializer
 

@@ -43,7 +43,7 @@ class ErrorHandlerMiddleware:
         return None
 
 
-def custom_exception_handler(exception: exceptions.ValidationError, context: Dict[str, Any]) -> HttpRequest:
+def custom_exception_handler(exception: exceptions.PitterException, context: Dict[str, Any]) -> HttpRequest:
     """Обработчик ошибок"""
     response = exception_handler(exception, context)
 

@@ -7,7 +7,6 @@ from rest_framework.views import APIView
 
 from pitter import exceptions
 from pitter.decorators import access_token_required
-from pitter.models.user import User
 
 
 class AccountView(APIView):
@@ -23,12 +22,7 @@ class AccountView(APIView):
         operation_summary='Удаление аккаунта',
         operation_description='Удаление пользовательского аккаунта',
     )
-    def delete(cls, user_id: str, request: Request) -> HttpResponse:
+    def delete(cls, request: Request) -> HttpResponse:
         """Удаление пользовательского аккаунта"""
-        try:
-            user: User = User.objects.get(id=user_id)
-        except User.DoesNotExist:
-            raise exceptions.ValidationError('User not found', status_code=HTTPStatus.NOT_FOUND.value)
-
-        user.delete()
+        request.token_user.delete()
         return HttpResponse(status=HTTPStatus.NO_CONTENT.value)
