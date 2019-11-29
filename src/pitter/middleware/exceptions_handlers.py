@@ -23,7 +23,7 @@ class ErrorHandlerMiddleware:
 
     def __call__(self, request: HttpRequest) -> HttpResponse:
         """Выполнить запрос"""
-        response = self.get_response(request)
+        response: HttpResponse = self.get_response(request)
         return response
 
     def process_exception(self, request: HttpRequest, exception: Exception) -> Optional[JsonResponse]:
