@@ -6,6 +6,7 @@ from typing import Dict
 from typing import Optional
 
 from django.conf import settings
+from django.http import HttpResponse
 from django.http import JsonResponse
 from django.http.request import HttpRequest
 from rest_framework.views import exception_handler
@@ -21,7 +22,7 @@ class ErrorHandlerMiddleware:
         self.get_response = get_response
 
     def __call__(self, request: HttpRequest) -> HttpResponse:
-        """Обработать запрос"""
+        """Выполнить запрос"""
         response = self.get_response(request)
         return response
 
