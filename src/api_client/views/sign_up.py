@@ -1,7 +1,7 @@
 from http import HTTPStatus
+from typing import Dict
 
 from django.db.utils import IntegrityError
-from django.http import HttpResponse
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.request import Request
 from rest_framework.views import APIView
@@ -30,7 +30,7 @@ class SignUpView(APIView):
         operation_summary='Создание аккаунта',
         operation_description='Создание нового аккаунта',
     )
-    def post(cls, request: Request) -> HttpResponse:
+    def post(cls, request: Request) -> Dict[str, str]:
         """Создание аккаунта"""
         login: str = request.data['login']
         password: str = request.data['password']

@@ -1,7 +1,7 @@
 from datetime import datetime
 from http import HTTPStatus
+from typing import Dict
 
-from django.http import HttpResponse
 from drf_yasg.utils import swagger_auto_schema
 from jwt import encode
 from rest_framework.request import Request
@@ -32,7 +32,7 @@ class SignInView(APIView):
         operation_summary='Вход в систему',
         operation_description='Вход в систему, получение JWT',
     )
-    def post(cls, request: Request) -> HttpResponse:
+    def post(cls, request: Request) -> Dict[str, str]:
         """Вход в систему, получение JWT"""
         login: str = request.data['login']
 

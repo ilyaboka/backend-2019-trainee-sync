@@ -3,19 +3,19 @@ from typing import Any
 from typing import Callable
 from typing import Dict
 
-from django.views.generic.base import View
 from rest_framework.request import Request
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from pitter.exceptions import exceptions
 
 
-def request_post_serializer(serializer: type) -> Callable[[Callable], Callable]:
+def request_post_serializer(serializer: type) -> Callable[[Callable[..., Response]], Callable[..., Response]]:
     """Валидация данных запроса"""
 
     def _decorator(handler: Callable[..., Response]) -> Callable[..., Response]:
         @functools.wraps(handler)
-        def _wrapper(view: View, request: Request, *args: Any, **kwargs: Any) -> Response:
+        def _wrapper(view: APIView, request: Request, *args: Any, **kwargs: Any) -> Response:
             ser = serializer(data=request.data)
             if not ser.is_valid():
                 raise exceptions.ValidationError(message=str(ser.errors))
@@ -26,12 +26,12 @@ def request_post_serializer(serializer: type) -> Callable[[Callable], Callable]:
     return _decorator
 
 
-def response_dict_serializer(serializer: type) -> Callable[[Callable], Callable]:
+def response_dict_serializer(serializer: type) -> Callable[[Callable[..., Response]], Callable[..., Response]]:
     """Валидация данных ответа"""
 
     def _decorator(handler: Callable[..., Dict[str, Any]]) -> Callable[..., Response]:
         @functools.wraps(handler)
-        def _wrapper(view: View, request: Request, *args: Any, **kwargs: Any) -> Response:
+        def _wrapper(view: APIView, request: Request, *args: Any, **kwargs: Any) -> Response:
             response_data: Dict[str, Any] = handler(view, request, *args, **kwargs)
             ser = serializer(data=response_data)
             if not ser.is_valid():
