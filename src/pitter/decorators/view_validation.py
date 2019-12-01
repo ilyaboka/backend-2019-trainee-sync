@@ -11,7 +11,7 @@ from rest_framework.views import APIView
 from pitter.exceptions import exceptions
 
 
-def request_post_serializer(serializer: type) -> Callable[[Callable[..., Response]], Callable[..., Response]]:
+def request_body_serializer(serializer: type) -> Callable[[Callable[..., Response]], Callable[..., Response]]:
     """Валидация данных запроса"""
 
     def _decorator(handler: Callable[..., Response]) -> Callable[..., Response]:

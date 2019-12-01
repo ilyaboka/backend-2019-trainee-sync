@@ -9,7 +9,7 @@ from rest_framework.views import APIView
 from api_client.validation_serializers import RecognizePostRequest
 from api_client.validation_serializers import RecognizePostResponse
 from pitter import exceptions
-from pitter.decorators import request_post_serializer
+from pitter.decorators import request_body_serializer
 from pitter.decorators import response_dict_serializer
 from pitter.utils import recognize
 
@@ -18,7 +18,7 @@ class RecognizeView(APIView):
     parser_classes = [MultiPartParser]
 
     @classmethod
-    @request_post_serializer(RecognizePostRequest)
+    @request_body_serializer(RecognizePostRequest)
     @response_dict_serializer(RecognizePostResponse)
     @swagger_auto_schema(
         request_body=RecognizePostRequest,

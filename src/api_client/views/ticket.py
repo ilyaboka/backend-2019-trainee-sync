@@ -9,14 +9,14 @@ from rest_framework.views import APIView
 from api_client.validation_serializers import TicketPostRequest
 from api_client.validation_serializers import TicketPostResponse
 from pitter import exceptions
-from pitter.decorators import request_post_serializer
+from pitter.decorators import request_body_serializer
 from pitter.decorators import response_dict_serializer
 from pitter.models.ticket import Ticket
 
 
 class TicketMobileView(APIView):
     @classmethod
-    @request_post_serializer(TicketPostRequest)
+    @request_body_serializer(TicketPostRequest)
     @response_dict_serializer(TicketPostResponse)
     @swagger_auto_schema(
         tags=['Pitter: mobile'],

@@ -11,14 +11,14 @@ from rest_framework.views import APIView
 from api_client.validation_serializers import SignInPostRequest
 from api_client.validation_serializers import SignInPostResponse
 from pitter import exceptions
-from pitter.decorators import request_post_serializer
+from pitter.decorators import request_body_serializer
 from pitter.decorators import response_dict_serializer
 from pitter.models import User
 
 
 class SignInView(APIView):
     @classmethod
-    @request_post_serializer(SignInPostRequest)
+    @request_body_serializer(SignInPostRequest)
     @response_dict_serializer(SignInPostResponse)
     @swagger_auto_schema(
         request_body=SignInPostRequest,

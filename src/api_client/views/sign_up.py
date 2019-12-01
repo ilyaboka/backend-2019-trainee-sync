@@ -9,14 +9,14 @@ from rest_framework.views import APIView
 from api_client.validation_serializers import SignUpPostRequest
 from api_client.validation_serializers import SignUpPostResponse
 from pitter import exceptions
-from pitter.decorators import request_post_serializer
+from pitter.decorators import request_body_serializer
 from pitter.decorators import response_dict_serializer
 from pitter.models.user import User
 
 
 class SignUpView(APIView):
     @classmethod
-    @request_post_serializer(SignUpPostRequest)
+    @request_body_serializer(SignUpPostRequest)
     @response_dict_serializer(SignUpPostResponse)
     @swagger_auto_schema(
         request_body=SignUpPostRequest,
