@@ -2,6 +2,7 @@ from datetime import datetime
 from http import HTTPStatus
 from typing import Dict
 
+from django.conf import settings
 from drf_yasg.utils import swagger_auto_schema
 from jwt import encode
 from rest_framework.request import Request
@@ -13,8 +14,6 @@ from pitter import exceptions
 from pitter.decorators import request_post_serializer
 from pitter.decorators import response_dict_serializer
 from pitter.models import User
-from pitter.settings import JSON_WEB_TOKEN_LIFETIME
-from pitter.settings import JSON_WEB_TOKEN_PRIVATE_KEY
 
 
 class SignInView(APIView):
@@ -47,8 +46,8 @@ class SignInView(APIView):
             raise exceptions.ValidationError('Invalid credentials', status_code=HTTPStatus.BAD_REQUEST.value)
 
         token_bytes: bytes = encode(
-            dict(exp=datetime.utcnow() + JSON_WEB_TOKEN_LIFETIME, id=user.id,),
-            JSON_WEB_TOKEN_PRIVATE_KEY,
+            dict(exp=datetime.utcnow() + settings.JSON_WEB_TOKEN_LIFETIME, id=user.id),
+            settings.JSON_WEB_TOKEN_PRIVATE_KEY,
             algorithm='RS256',
         )
 

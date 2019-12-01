@@ -3,6 +3,7 @@ from typing import Callable
 from typing import Dict
 from typing import List
 
+from django.conf import settings
 from django.http import HttpResponse
 from django.http.request import HttpRequest
 from jwt import decode
@@ -10,7 +11,6 @@ from jwt.exceptions import ExpiredSignatureError
 from jwt.exceptions import InvalidTokenError
 
 from pitter import exceptions
-from pitter import settings
 from pitter.models.user import User
 
 
