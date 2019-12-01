@@ -15,7 +15,7 @@ class Message(BaseModel):
     speech_transcript = models.TextField()
 
     def to_dict(self) -> Dict[str, str]:
-        """Return dict containig data"""
+        """Вернуть словарь с данными"""
         return dict(
             id=self.id,
             user=self.user,
@@ -25,7 +25,7 @@ class Message(BaseModel):
 
     @staticmethod
     def create_message(user: str, speech_audio_file_path: str) -> Message:
-        """Create new message"""
+        """Создать новое сообщение"""
         speech_transcript = None
         speech_transcript = recognize(open(speech_audio_file_path).read())
         new_message: Message = Message.objects.create(
@@ -35,5 +35,5 @@ class Message(BaseModel):
 
     @staticmethod
     def get_messages() -> QuerySet:
-        """Get all message"""
+        """Вернуть все сообщения в порядке их создания"""
         return Message.objects.find().order_by('created_at')

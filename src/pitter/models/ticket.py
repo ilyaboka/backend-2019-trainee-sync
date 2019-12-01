@@ -14,12 +14,12 @@ class Ticket(BaseModel):
     user_comment = models.TextField()
 
     def to_dict(self) -> Dict[str, str]:
-        """Return dict containig data"""
+        """Вернуть словарь с данными"""
         return dict(id=self.id, fake_id=self.fake_id, message=self.message, user_comment=self.user_comment,)
 
     @staticmethod
     def create_ticket(fake_id: str, message: str, user_comment: str) -> Ticket:
-        """Create new ticket"""
+        """Создать новый ticket"""
         new_ticket: Ticket = Ticket.objects.create(
             fake_id=fake_id, message=message, user_comment=user_comment,
         )
@@ -27,5 +27,5 @@ class Ticket(BaseModel):
 
     @staticmethod
     def get_tickets() -> QuerySet:
-        """Get all tickets"""
+        """Вернуть все тикеты в порядке создания"""
         return Ticket.objects.find().order_by('created_at')

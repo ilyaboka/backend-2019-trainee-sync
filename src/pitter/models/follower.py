@@ -13,12 +13,12 @@ class Follower(BaseModel):
     folower = models.ForeignKey('User', on_delete=models.CASCADE)
 
     def to_dict(self) -> Dict[str, str]:
-        """Return dict containig data"""
+        """Вернуть словарь данных"""
         return dict(id=self.id, user=self.user, folower=self.folower,)
 
     @staticmethod
     def create_follower(user: str, follower: str) -> Follower:
-        """Create new follower"""
+        """Создать нового подписчика"""
         new_follower: Follower = Follower.objects.create(
             user=user, follower=follower,
         )
@@ -26,5 +26,5 @@ class Follower(BaseModel):
 
     @staticmethod
     def get_messages() -> QuerySet:
-        """Get all follower"""
+        """Вернуть всех подписчиков в порядке их создания"""
         return Follower.objects.find().order_by('created_at')
