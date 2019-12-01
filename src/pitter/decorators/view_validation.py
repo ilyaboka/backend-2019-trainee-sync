@@ -11,6 +11,26 @@ from rest_framework.views import APIView
 from pitter.exceptions import exceptions
 
 
+def request_query_parameters_serializer(
+    # pylint: disable=bad-continuation
+    serializer: type,
+) -> Callable[[Callable[..., Response]], Callable[..., Response]]:
+    # pylint: enable=bad-continuation
+    """Валидация данных запроса"""
+
+    def _decorator(handler: Callable[..., Response]) -> Callable[..., Response]:
+        @functools.wraps(handler)
+        def _wrapper(view: APIView, request: Request, *args: Any, **kwargs: Any) -> Response:
+            ser = serializer(data=request.query_params)
+            if not ser.is_valid():
+                raise exceptions.ValidationError(message=str(ser.errors))
+            return handler(view, request, *args, **kwargs)
+
+        return _wrapper
+
+    return _decorator
+
+
 def request_body_serializer(serializer: type) -> Callable[[Callable[..., Response]], Callable[..., Response]]:
     """Валидация данных запроса"""
 
