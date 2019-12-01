@@ -2,19 +2,10 @@ import traceback
 from http import HTTPStatus
 from typing import Optional
 
+from django.conf import settings
 from django.http import JsonResponse
 from rest_framework import serializers
 from rest_framework.exceptions import APIException
-
-from pitter import settings
-
-
-class ExceptionResponse(serializers.Serializer):
-    code = serializers.CharField(required=True)
-    title = serializers.CharField(required=False, allow_null=True)
-    message = serializers.CharField(required=True)
-    payload = serializers.DictField(required=False, allow_null=True)
-    debug = serializers.CharField(required=False, allow_null=True)
 
 
 class PitterException(APIException):
@@ -48,6 +39,25 @@ class PitterException(APIException):
         return json_response
 
 
+class AuthorizationError(PitterException):
+    default_detail = 'Authorization error'
+    status_code = HTTPStatus.UNAUTHORIZED
+
+    def __init__(self, message: Optional[str] = None) -> None:
+        """Создать новое исключение"""
+        detail: str = message if message else self.default_detail
+        exception_code: str = self.__class__.__name__
+        super().__init__(detail, exception_code, self.status_code)
+
+
+class ExceptionResponse(serializers.Serializer):
+    code = serializers.CharField(required=True)
+    title = serializers.CharField(required=False, allow_null=True)
+    message = serializers.CharField(required=True)
+    payload = serializers.DictField(required=False, allow_null=True)
+    debug = serializers.CharField(required=False, allow_null=True)
+
+
 class ValidationError(PitterException):
     default_detail = 'Validation error'
 
@@ -66,15 +76,4 @@ class ValidationError(PitterException):
         self.status_code = status_code if status_code else HTTPStatus.UNPROCESSABLE_ENTITY
         self.title = title
         self.payload = payload
-        super().__init__(detail, exception_code, self.status_code)
-
-
-class AuthorizationError(PitterException):
-    default_detail = 'Authorization error'
-    status_code = HTTPStatus.UNAUTHORIZED
-
-    def __init__(self, message: Optional[str] = None) -> None:
-        """Создать новое исключение"""
-        detail: str = message if message else self.default_detail
-        exception_code: str = self.__class__.__name__
         super().__init__(detail, exception_code, self.status_code)
