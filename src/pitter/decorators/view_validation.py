@@ -2,6 +2,7 @@ import functools
 from typing import Any
 from typing import Callable
 from typing import Dict
+from typing import Sequence
 
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -34,6 +35,23 @@ def response_dict_serializer(serializer: type) -> Callable[[Callable[..., Respon
         def _wrapper(view: APIView, request: Request, *args: Any, **kwargs: Any) -> Response:
             response_data: Dict[str, Any] = handler(view, request, *args, **kwargs)
             ser = serializer(data=response_data)
+            if not ser.is_valid():
+                raise exceptions.InternalServerError(message=str(ser.errors))
+            return Response(ser.validated_data)
+
+        return _wrapper
+
+    return _decorator
+
+
+def response_list_serializer(serializer: type) -> Callable[[Callable[..., Response]], Callable[..., Response]]:
+    """Валидация данных ответа"""
+
+    def _decorator(handler: Callable[..., Sequence[Dict[str, Any]]]) -> Callable[..., Response]:
+        @functools.wraps(handler)
+        def _wrapper(view: APIView, request: Request, *args: Any, **kwargs: Any) -> Response:
+            response_data: Sequence[Dict[str, Any]] = handler(view, request, *args, **kwargs)
+            ser = serializer(data=response_data, many=True)
             if not ser.is_valid():
                 raise exceptions.InternalServerError(message=str(ser.errors))
             return Response(ser.validated_data)
