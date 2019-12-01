@@ -3,7 +3,6 @@ from __future__ import annotations
 from typing import Dict
 
 from django.db import models
-from django.db.models import QuerySet
 
 from pitter.models.base import BaseModel
 from pitter.utils import recognize
@@ -32,8 +31,3 @@ class Message(BaseModel):
             user=user, speech_audio_file_path=speech_audio_file_path, speech_transcript=speech_transcript,
         )
         return new_message
-
-    @staticmethod
-    def get_messages() -> QuerySet:
-        """Вернуть все сообщения в порядке их создания"""
-        return Message.objects.find().order_by('created_at')

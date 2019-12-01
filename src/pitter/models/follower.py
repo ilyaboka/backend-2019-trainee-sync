@@ -3,7 +3,6 @@ from __future__ import annotations
 from typing import Dict
 
 from django.db import models
-from django.db.models import QuerySet
 
 from pitter.models.base import BaseModel
 
@@ -23,8 +22,3 @@ class Follower(BaseModel):
             user=user, follower=follower,
         )
         return new_follower
-
-    @staticmethod
-    def get_messages() -> QuerySet:
-        """Вернуть всех подписчиков в порядке их создания"""
-        return Follower.objects.find().order_by('created_at')

@@ -3,7 +3,6 @@ from __future__ import annotations
 from typing import Dict
 
 from django.db import models
-from django.db.models import QuerySet
 
 from pitter.models.base import BaseModel
 
@@ -24,8 +23,3 @@ class Ticket(BaseModel):
             fake_id=fake_id, message=message, user_comment=user_comment,
         )
         return new_ticket
-
-    @staticmethod
-    def get_tickets() -> QuerySet:
-        """Вернуть все тикеты в порядке создания"""
-        return Ticket.objects.find().order_by('created_at')
