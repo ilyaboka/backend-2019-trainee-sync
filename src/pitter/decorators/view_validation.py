@@ -35,7 +35,7 @@ def response_dict_serializer(serializer: type) -> Callable[[Callable[..., Respon
             response_data: Dict[str, Any] = handler(view, request, *args, **kwargs)
             ser = serializer(data=response_data)
             if not ser.is_valid():
-                raise exceptions.ValidationError(message=str(ser.errors))
+                raise exceptions.InternalServerError(message=str(ser.errors))
             return Response(ser.validated_data)
 
         return _wrapper

@@ -58,6 +58,16 @@ class ExceptionResponse(serializers.Serializer):
     debug = serializers.CharField(required=False, allow_null=True)
 
 
+class InternalServerError(PitterException):
+    default_detail = 'Internal server error'
+
+    def __init__(self, message: Optional[str] = None) -> None:
+        """Создать новое исключение"""
+        detail: str = message if message and settings.DEBUG else self.default_detail
+        exception_code: str = self.__class__.__name__
+        super().__init__(detail, exception_code, self.status_code)
+
+
 class ValidationError(PitterException):
     default_detail = 'Validation error'
 

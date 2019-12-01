@@ -31,15 +31,7 @@ class ErrorHandlerMiddleware:
         """Вернуть JsonResponse или None из exception"""
         if not isinstance(exception, exceptions.PitterException):
             LOGGER.exception(traceback.format_exc())
-            return JsonResponse(
-                dict(
-                    code='ServerError',
-                    title='Что-то пошло не так',
-                    message=str(exception),
-                    debug=traceback.format_exc() if settings.DEBUG else None,
-                ),
-                status=500,
-            )
+            return exceptions.InternalServerError(message=str(exception)).make_response()
         return None
 
 
