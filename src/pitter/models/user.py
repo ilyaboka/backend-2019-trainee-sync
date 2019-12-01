@@ -46,7 +46,7 @@ class User(BaseModel):
     @staticmethod
     def get_users() -> QuerySet:
         """Получить всех пользователей"""
-        return User.objects.find().order_by('created_at')
+        return User.objects.all().order_by('created_at')
 
     def has_password(self, password: str) -> bool:
         """Проверить пароль пользователя"""
