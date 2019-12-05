@@ -1,5 +1,4 @@
 [tool.black]
-exclude = 'src/pitter/migrations'
 line-length = 120
 skip-string-normalization = true
 target-version = ['py36', 'py37', 'py38']
