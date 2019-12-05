@@ -28,6 +28,6 @@ class Message(BaseModel):
         speech_transcript = None
         speech_transcript = recognize(open(speech_audio_file_path).read())
         new_message: Message = Message.objects.create(
-            user=user, speech_audio_file_path=speech_audio_file_path, speech_transcript=speech_transcript,
+            user=user, speech_audio_file_path=speech_audio_file_path, speech_transcript=speech_transcript
         )
         return new_message
