@@ -30,6 +30,7 @@ class UserListView(APIView):
         query_serializer=UserListGetRequest,
         responses={
             HTTPStatus.OK.value: 'Success',
+            HTTPStatus.BAD_REQUEST.value: exceptions.ExceptionResponse,
             HTTPStatus.UNAUTHORIZED.value: exceptions.ExceptionResponse,
             HTTPStatus.UNPROCESSABLE_ENTITY.value: exceptions.ExceptionResponse,
             HTTPStatus.INTERNAL_SERVER_ERROR.value: exceptions.ExceptionResponse,
