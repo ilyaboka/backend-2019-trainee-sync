@@ -3,6 +3,8 @@ from __future__ import annotations
 from typing import Dict
 
 from django.db import models
+from django.db.models import F
+from django.db.models import Q
 
 from pitter.models.base import BaseModel
 from pitter.models.user import User
@@ -15,6 +17,7 @@ class Follower(BaseModel):
     class Meta:
         constraints = [
             models.UniqueConstraint(fields=['follower', 'following'], name='uniqueness_of_follower-following_pair'),
+            models.CheckConstraint(check=~Q(follower__exact=F('following')), name='forbid to follow yourself'),
         ]
 
     def to_dict(self) -> Dict[str, str]:

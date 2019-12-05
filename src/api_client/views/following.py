@@ -30,6 +30,7 @@ class FollowingView(APIView):
             HTTPStatus.UNAUTHORIZED.value: exceptions.ExceptionResponse,
             HTTPStatus.NOT_FOUND.value: exceptions.ExceptionResponse,
             HTTPStatus.CONFLICT.value: exceptions.ExceptionResponse,
+            HTTPStatus.UNPROCESSABLE_ENTITY.value: exceptions.ExceptionResponse,
             HTTPStatus.INTERNAL_SERVER_ERROR.value: exceptions.ExceptionResponse,
         },
         operation_summary='Создание подписки',
@@ -44,6 +45,10 @@ class FollowingView(APIView):
             raise exceptions.NotFoundError(f'User with id {following_id} not found')
 
         follower: User = request.token_user
+
+        if follower == following:
+            raise exceptions.ValidationError("You can't follow yourself")
+
         try:
             Follower.create_follower(follower, following)
         except IntegrityError as integrity_error:
