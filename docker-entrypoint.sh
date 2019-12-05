@@ -9,5 +9,4 @@ done
 
 >&2 echo "Postgres is up - running django"
 
-src/manage.py migrate
 src/manage.py runserver 0.0.0.0:8000
