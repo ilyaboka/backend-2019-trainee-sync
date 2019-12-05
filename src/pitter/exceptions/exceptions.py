@@ -50,6 +50,17 @@ class AuthorizationError(PitterException):
         super().__init__(detail, exception_code, self.status_code)
 
 
+class ConflictError(PitterException):
+    default_detail = 'Conflict error'
+    status_code = HTTPStatus.CONFLICT
+
+    def __init__(self, message: Optional[str] = None) -> None:
+        """Создать новое исключение"""
+        detail: str = message if message else self.default_detail
+        exception_code: str = self.__class__.__name__
+        super().__init__(detail, exception_code, self.status_code)
+
+
 class ExceptionResponse(serializers.Serializer):
     code = serializers.CharField(required=True)
     title = serializers.CharField(required=False, allow_null=True)

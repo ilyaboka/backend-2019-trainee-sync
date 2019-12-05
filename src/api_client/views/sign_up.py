@@ -38,8 +38,6 @@ class SignUpView(APIView):
         try:
             user = User.create_user(login=login, password=password)
         except IntegrityError as integrity_error:
-            raise exceptions.ValidationError(
-                'Login already in use', status_code=HTTPStatus.CONFLICT.value
-            ) from integrity_error
+            raise exceptions.ConflictError(f'Login {login} already in use') from integrity_error
 
         return dict(id=user.id, login=user.login,)
