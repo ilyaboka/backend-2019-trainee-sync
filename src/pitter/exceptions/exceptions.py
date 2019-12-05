@@ -79,6 +79,17 @@ class InternalServerError(PitterException):
         super().__init__(detail, exception_code, self.status_code)
 
 
+class NotFoundError(PitterException):
+    default_detail = 'Not found'
+    status_code = HTTPStatus.NOT_FOUND
+
+    def __init__(self, message: Optional[str] = None) -> None:
+        """Создать новое исключение"""
+        detail: str = message if message else self.default_detail
+        exception_code: str = self.__class__.__name__
+        super().__init__(detail, exception_code, self.status_code)
+
+
 class ValidationError(PitterException):
     default_detail = 'Validation error'
 
