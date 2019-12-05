@@ -5,18 +5,24 @@ from typing import Dict
 from django.db import models
 
 from pitter.models.base import BaseModel
+from pitter.models.user import User
 
 
 class Follower(BaseModel):
-    user = models.ForeignKey('User', on_delete=models.CASCADE)
-    folower = models.ForeignKey('User', on_delete=models.CASCADE)
+    follower = models.ForeignKey(User, models.CASCADE, 'following')
+    following = models.ForeignKey(User, models.CASCADE, 'followers')
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['follower', 'following'], name='uniqueness_of_follower-following_pair'),
+        ]
 
     def to_dict(self) -> Dict[str, str]:
         """Вернуть словарь данных"""
-        return dict(id=self.id, user=self.user, folower=self.folower)
+        return dict(id=self.id, follower=self.follower, following=self.following)
 
     @staticmethod
-    def create_follower(user: str, follower: str) -> Follower:
+    def create_follower(follower: User, following: User) -> Follower:
         """Создать нового подписчика"""
-        new_follower: Follower = Follower.objects.create(user=user, follower=follower)
+        new_follower: Follower = Follower.objects.create(follower=follower, following=following)
         return new_follower
