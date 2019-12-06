@@ -30,7 +30,8 @@ class PitterException(APIException):
     @staticmethod
     def get_exception_serializer() -> type:
         """Вернуть serializer для исключений"""
-        return ExceptionResponse
+        serializer: type = ExceptionResponse
+        return serializer
 
     # for ancestors
     @classmethod
