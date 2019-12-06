@@ -1,7 +1,7 @@
-from typing import Sequence
+from typing import List
 
 from .recognize import recognize
 
-__all__: Sequence[str] = [
+__all__: List[str] = [
     'recognize',
 ]

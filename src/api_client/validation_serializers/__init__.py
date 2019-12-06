@@ -1,4 +1,4 @@
-from typing import Sequence
+from typing import List
 
 from .following_serializers import FollowingRequest
 from .following_serializers import FollowingResponse
@@ -13,7 +13,7 @@ from .ticket_serializers import TicketPostResponse
 from .user_list_serializers import UserListGetRequest
 from .user_list_serializers import UserListGetResponse
 
-__all__: Sequence[str] = [
+__all__: List[str] = [
     'FollowingRequest',
     'FollowingResponse',
     'RecognizePostRequest',

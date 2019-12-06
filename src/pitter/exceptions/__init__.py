@@ -1,4 +1,4 @@
-from typing import Sequence
+from typing import List
 
 from .exceptions import BadRequestError
 from .exceptions import ConflictError
@@ -10,7 +10,7 @@ from .exceptions import UnauthorizedError
 from .exceptions import UnprocessableEntityError
 from .exceptions import UnsupportedMediaTypeError
 
-__all__: Sequence[str] = [
+__all__: List[str] = [
     'UnauthorizedError',
     'BadRequestError',
     'ConflictError',
