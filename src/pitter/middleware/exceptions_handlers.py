@@ -11,7 +11,7 @@ from django.http import JsonResponse
 from django.http.request import HttpRequest
 from rest_framework.views import exception_handler
 
-from pitter.exceptions import exceptions
+from pitter import exceptions
 
 LOGGER: logging.Logger = logging.getLogger(__name__)
 
@@ -41,16 +41,6 @@ def custom_exception_handler(exception: exceptions.PitterException, context: Dic
 
     if settings.DEBUG:
         LOGGER.exception(traceback.format_exc())
-
-    if isinstance(exception, AssertionError):
-        return JsonResponse(
-            dict(
-                code='ValidationError',
-                message=str(exception),
-                debug=traceback.format_exc() if settings.DEBUG else None,
-            ),
-            status=400,
-        )
 
     if response is not None and hasattr(response, 'data'):
         if hasattr(response.data['detail'], 'code'):

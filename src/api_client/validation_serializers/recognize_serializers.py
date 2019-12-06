@@ -1,10 +1,8 @@
-from http import HTTPStatus
-
 import magic
 from django.core.files.uploadedfile import UploadedFile
 from rest_framework import serializers
 
-from pitter.exceptions import ValidationError
+from pitter import exceptions
 
 
 class RecognizePostRequest(serializers.Serializer):
@@ -22,7 +20,7 @@ class RecognizePostRequest(serializers.Serializer):
             'audio/x-wav',
         ]:
             # pylint: enable=bad-continuation
-            raise ValidationError('Invalid speech file', status_code=HTTPStatus.UNSUPPORTED_MEDIA_TYPE.value)
+            raise exceptions.UnsupportedMediaTypeError('Invalid speech file')
         speech_file.open()
 
 

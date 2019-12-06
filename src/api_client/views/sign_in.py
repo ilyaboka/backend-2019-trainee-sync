@@ -38,12 +38,10 @@ class SignInView(APIView):
         try:
             user: User = User.objects.get(login=login)
         except User.DoesNotExist as does_not_exist:
-            raise exceptions.ValidationError(
-                'Invalid credentials', status_code=HTTPStatus.BAD_REQUEST.value
-            ) from does_not_exist
+            raise exceptions.ValidationError('Invalid credentials') from does_not_exist
 
         if not user.has_password(request.data['password']):
-            raise exceptions.ValidationError('Invalid credentials', status_code=HTTPStatus.BAD_REQUEST.value)
+            raise exceptions.ValidationError('Invalid credentials')
 
         token_bytes: bytes = encode(
             dict(exp=datetime.utcnow() + settings.JSON_WEB_TOKEN_LIFETIME, id=user.id),
@@ -54,6 +52,6 @@ class SignInView(APIView):
         try:
             token_string = token_bytes.decode('ascii')
         except UnicodeError as unicode_error:
-            raise exceptions.PitterException('Something went wrong', 'Server Error',) from unicode_error
+            raise exceptions.InternalServerError('Token contains non-ascii symbols') from unicode_error
 
         return dict(token=token_string)

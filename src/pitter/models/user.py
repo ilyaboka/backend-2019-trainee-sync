@@ -8,7 +8,7 @@ from typing import Union
 from django.db import models
 from django.db.models import QuerySet
 
-from pitter.exceptions import PitterException
+from pitter import exceptions
 from pitter.models.base import BaseModel
 
 
@@ -30,7 +30,7 @@ class User(BaseModel):
         try:
             password_bytes = password.encode()
         except UnicodeError as unicode_error:
-            raise PitterException('Error while encoding string', 'ServerError') from unicode_error
+            raise exceptions.InternalServerError('Error while encoding string') from unicode_error
 
         salt_for_password = urandom(cls.SALT_FOR_PASSWORD_LENGTH)
         new_user: User = User.objects.create(

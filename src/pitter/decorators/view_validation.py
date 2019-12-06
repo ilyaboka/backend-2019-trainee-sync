@@ -7,7 +7,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from pitter.exceptions import exceptions
+from pitter import exceptions
 
 
 def request_query_parameters_serializer(
@@ -22,7 +22,7 @@ def request_query_parameters_serializer(
         def _wrapper(view: APIView, request: Request, *args: Any, **kwargs: Any) -> Response:
             ser = serializer(data=request.query_params)
             if not ser.is_valid():
-                raise exceptions.ValidationError(message=str(ser.errors))
+                raise exceptions.BadRequestError(str(ser.errors))
             return handler(view, request, *args, **kwargs)
 
         return _wrapper
@@ -38,7 +38,7 @@ def request_body_serializer(serializer: type) -> Callable[[Callable[..., Respons
         def _wrapper(view: APIView, request: Request, *args: Any, **kwargs: Any) -> Response:
             ser = serializer(data=request.data)
             if not ser.is_valid():
-                raise exceptions.ValidationError(message=str(ser.errors))
+                raise exceptions.BadRequestError(str(ser.errors))
             return handler(view, request, *args, **kwargs)
 
         return _wrapper
@@ -55,7 +55,7 @@ def response_dict_serializer(serializer: type) -> Callable[[Callable[..., Respon
             response_data: Dict[str, Any] = handler(view, request, *args, **kwargs)
             ser = serializer(data=response_data)
             if not ser.is_valid():
-                raise exceptions.InternalServerError(message=str(ser.errors))
+                raise exceptions.InternalServerError(str(ser.errors))
             return Response(ser.validated_data)
 
         return _wrapper

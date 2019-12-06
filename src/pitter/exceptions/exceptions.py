@@ -50,6 +50,17 @@ class AuthorizationError(PitterException):
         super().__init__(detail, exception_code, self.status_code)
 
 
+class BadRequestError(PitterException):
+    default_detail: str = 'Bad request error'
+    status_code: HTTPStatus = HTTPStatus.BAD_REQUEST
+
+    def __init__(self, message: Optional[str] = None) -> None:
+        """Создать новое исключение"""
+        detail: str = message if message else self.default_detail
+        exception_code: str = self.__class__.__name__
+        super().__init__(detail, exception_code, self.status_code)
+
+
 class ConflictError(PitterException):
     default_detail: str = 'Conflict error'
     status_code: HTTPStatus = HTTPStatus.CONFLICT
@@ -88,12 +99,23 @@ class NotFoundError(PitterException):
         super().__init__(detail, exception_code, self.status_code)
 
 
-class ValidationError(PitterException):
-    default_detail: str = 'Validation error'
+class UnsupportedMediaTypeError(PitterException):
+    default_detail: str = 'Unsupported Media Type'
+    status_code: HTTPStatus = HTTPStatus.UNSUPPORTED_MEDIA_TYPE
 
-    def __init__(self, message: Optional[str] = None, status_code: Optional[HTTPStatus] = None) -> None:
+    def __init__(self, message: Optional[str] = None) -> None:
         """Создать новое исключение"""
         detail: str = message if message else self.default_detail
         exception_code: str = self.__class__.__name__
-        self.status_code: HTTPStatus = status_code if status_code else HTTPStatus.UNPROCESSABLE_ENTITY
+        super().__init__(detail, exception_code, self.status_code)
+
+
+class ValidationError(PitterException):
+    default_detail: str = 'Validation error'
+    status_code: HTTPStatus = HTTPStatus.UNPROCESSABLE_ENTITY
+
+    def __init__(self, message: Optional[str] = None) -> None:
+        """Создать новое исключение"""
+        detail: str = message if message else self.default_detail
+        exception_code: str = self.__class__.__name__
         super().__init__(detail, exception_code, self.status_code)

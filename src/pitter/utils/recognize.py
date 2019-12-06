@@ -20,16 +20,16 @@ def recognize(speech_file: bytes) -> str:
     try:
         response: Response = post(settings.ASYNCHRONOUS_SERVICE_URL, files=files)
     except RequestException as request_exception:
-        raise exceptions.PitterException('Something went wrong', 'ServerError') from request_exception
+        raise exceptions.InternalServerError("Can't make request to asynchronous service") from request_exception
 
     try:
         response_json: Dict[str, Any] = response.json()
     except ValueError as value_error:
-        raise exceptions.PitterException('Something went wrong', 'ServerError') from value_error
+        raise exceptions.InternalServerError("Can't make request to asynchronous service") from value_error
 
     try:
         recognized_text: str = response_json['recognizedText']
     except KeyError as key_error:
-        raise exceptions.PitterException('Something went wrong', 'ServerError') from key_error
+        raise exceptions.InternalServerError("Can't make request to asynchronous service") from key_error
 
     return recognized_text
