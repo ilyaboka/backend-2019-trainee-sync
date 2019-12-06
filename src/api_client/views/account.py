@@ -18,7 +18,6 @@ class AccountView(APIView):
             [
                 (HTTPStatus.NO_CONTENT.value, 'Success'),
                 exceptions.UnauthorizedError.get_schema(),
-                exceptions.NotFoundError.get_schema(),
                 exceptions.InternalServerError.get_schema(),
             ],
         ),
@@ -28,4 +27,5 @@ class AccountView(APIView):
     def delete(cls, request: Request) -> HttpResponse:
         """Удаление пользовательского аккаунта"""
         request.token_user.delete()
-        return HttpResponse(status=HTTPStatus.NO_CONTENT.value)
+        response: HttpResponse = HttpResponse(status=HTTPStatus.NO_CONTENT.value)
+        return response
