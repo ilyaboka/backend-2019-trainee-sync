@@ -1,7 +1,7 @@
 from typing import Sequence
 
-from .following_serializers import FollowingPostRequest
-from .following_serializers import FollowingPostResponse
+from .following_serializers import FollowingRequest
+from .following_serializers import FollowingResponse
 from .recognize_serializers import RecognizePostRequest
 from .recognize_serializers import RecognizePostResponse
 from .sign_in_serializers import SignInPostRequest
@@ -14,8 +14,8 @@ from .user_list_serializers import UserListGetRequest
 from .user_list_serializers import UserListGetResponse
 
 __all__: Sequence[str] = [
-    'FollowingPostRequest',
-    'FollowingPostResponse',
+    'FollowingRequest',
+    'FollowingResponse',
     'RecognizePostRequest',
     'RecognizePostResponse',
     'SignInPostRequest',

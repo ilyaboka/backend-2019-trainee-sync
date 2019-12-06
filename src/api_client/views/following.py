@@ -6,8 +6,8 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework.request import Request
 from rest_framework.views import APIView
 
-from api_client.validation_serializers import FollowingPostRequest
-from api_client.validation_serializers import FollowingPostResponse
+from api_client.validation_serializers import FollowingRequest
+from api_client.validation_serializers import FollowingResponse
 from pitter import exceptions
 from pitter.decorators import access_token_required
 from pitter.decorators import request_body_serializer
@@ -19,14 +19,53 @@ from pitter.models import User
 class FollowingView(APIView):
     @classmethod
     @access_token_required
-    @request_body_serializer(FollowingPostRequest)
-    @response_dict_serializer(FollowingPostResponse)
+    @request_body_serializer(FollowingRequest)
+    @response_dict_serializer(FollowingResponse)
     @swagger_auto_schema(
         tags=['Pitter: mobile'],
-        request_body=FollowingPostRequest,
+        request_body=FollowingRequest,
         responses=dict(
             [
-                FollowingPostResponse.get_schema(),
+                FollowingResponse.get_schema(),
+                exceptions.BadRequestError.get_schema(),
+                exceptions.UnauthorizedError.get_schema(),
+                exceptions.NotFoundError.get_schema(),
+                exceptions.InternalServerError.get_schema(),
+            ],
+        ),
+        operation_summary='Удаление подписки',
+        operation_description='Отписаться от аккаунта другого пользователя',
+    )
+    def delete(cls, request: Request) -> Dict[str, Union[bool, str]]:
+        """Удаление подписки"""
+        unfollowing_id: str = request.data['id']
+        try:
+            unfollowing: User = User.objects.get(id=unfollowing_id)
+        except User.DoesNotExist:
+            raise exceptions.NotFoundError(f'User with id {unfollowing_id} not found')
+
+        follower: User = request.token_user
+
+        try:
+            following: Follower = Follower.objects.get(follower=follower, following=unfollowing)
+        except Follower.DoesNotExist as follower_does_not_exist:
+            raise exceptions.NotFoundError(f'You not follow user with id {unfollowing_id}') from follower_does_not_exist
+
+        following.delete()
+
+        response: Dict[str, Union[bool, str]] = dict(follow=False, id=unfollowing_id)
+        return response
+
+    @classmethod
+    @access_token_required
+    @request_body_serializer(FollowingRequest)
+    @response_dict_serializer(FollowingResponse)
+    @swagger_auto_schema(
+        tags=['Pitter: mobile'],
+        request_body=FollowingRequest,
+        responses=dict(
+            [
+                FollowingResponse.get_schema(),
                 exceptions.BadRequestError.get_schema(),
                 exceptions.UnauthorizedError.get_schema(),
                 exceptions.NotFoundError.get_schema(),
@@ -56,5 +95,5 @@ class FollowingView(APIView):
         except IntegrityError as integrity_error:
             raise exceptions.ConflictError(f'You already follow user with id {following_id}') from integrity_error
 
-        response: Dict[str, Union[bool, str]] = dict(id=following_id, success=True)
+        response: Dict[str, Union[bool, str]] = dict(follow=True, id=following_id)
         return response
