@@ -1,6 +1,5 @@
 import traceback
 from http import HTTPStatus
-from typing import Dict
 from typing import Optional
 
 from django.conf import settings
@@ -64,9 +63,7 @@ class ConflictError(PitterException):
 
 class ExceptionResponse(serializers.Serializer):
     code: serializers.CharField = serializers.CharField(required=True)
-    title: serializers.CharField = serializers.CharField(required=False, allow_null=True)
     message: serializers.CharField = serializers.CharField(required=True)
-    payload: serializers.DictField = serializers.DictField(required=False, allow_null=True)
     debug: serializers.CharField = serializers.CharField(required=False, allow_null=True)
 
 
@@ -94,19 +91,9 @@ class NotFoundError(PitterException):
 class ValidationError(PitterException):
     default_detail: str = 'Validation error'
 
-    def __init__(
-        # pylint: disable=bad-continuation
-        self,
-        message: Optional[str] = None,
-        title: Optional[str] = None,
-        payload: Optional[Dict] = None,
-        status_code: Optional[HTTPStatus] = None,
-    ) -> None:
-        # pylint: enable=bad-continuation
+    def __init__(self, message: Optional[str] = None, status_code: Optional[HTTPStatus] = None) -> None:
         """Создать новое исключение"""
         detail: str = message if message else self.default_detail
         exception_code: str = self.__class__.__name__
         self.status_code: HTTPStatus = status_code if status_code else HTTPStatus.UNPROCESSABLE_ENTITY
-        self.title: Optional[str] = title
-        self.payload: Optional[Dict] = payload
         super().__init__(detail, exception_code, self.status_code)

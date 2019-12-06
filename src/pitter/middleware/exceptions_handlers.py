@@ -46,7 +46,6 @@ def custom_exception_handler(exception: exceptions.PitterException, context: Dic
         return JsonResponse(
             dict(
                 code='ValidationError',
-                title='Ошибка валидации',
                 message=str(exception),
                 debug=traceback.format_exc() if settings.DEBUG else None,
             ),
@@ -57,9 +56,7 @@ def custom_exception_handler(exception: exceptions.PitterException, context: Dic
         if hasattr(response.data['detail'], 'code'):
             response.data['debug'] = traceback.format_exc() if settings.DEBUG else None
             response.data['code'] = response.data['detail'].code
-            response.data['title'] = exception.payload if hasattr(exception, 'title') else None
             response.data['message'] = response.data['detail']
-            response.data['payload'] = exception.payload if hasattr(exception, 'payload') else None
             del response.data['detail']
 
     return response
