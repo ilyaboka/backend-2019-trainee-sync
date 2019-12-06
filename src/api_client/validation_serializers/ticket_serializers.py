@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .response_serializer import ResponseSerializer
+from api_client.validation_serializers.response_serializer import ResponseSerializer
 
 
 class TicketPostRequest(serializers.Serializer):

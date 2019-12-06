@@ -2,9 +2,8 @@ import magic
 from django.core.files.uploadedfile import UploadedFile
 from rest_framework import serializers
 
+from api_client.validation_serializers.response_serializer import ResponseSerializer
 from pitter import exceptions
-
-from .response_serializer import ResponseSerializer
 
 
 class RecognizePostRequest(serializers.Serializer):
