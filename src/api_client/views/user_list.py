@@ -34,7 +34,7 @@ class UserListView(APIView):
                 (HTTPStatus.OK.value, 'Success'),
                 exceptions.BadRequestError.get_schema(),
                 exceptions.UnauthorizedError.get_schema(),
-                exceptions.ValidationError.get_schema(),
+                exceptions.UnprocessableEntityError.get_schema(),
                 exceptions.InternalServerError.get_schema(),
             ],
         ),
@@ -50,7 +50,7 @@ class UserListView(APIView):
         try:
             page: Page = paginator.page(page_number)
         except InvalidPage as invalid_page:
-            raise exceptions.ValidationError(f'Invalid page number: {page_number}') from invalid_page
+            raise exceptions.UnprocessableEntityError(f'Invalid page number: {page_number}') from invalid_page
 
         users: List[User] = list(page)
         has_next_page: bool = page.has_next()

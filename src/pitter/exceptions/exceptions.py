@@ -119,7 +119,7 @@ class UnsupportedMediaTypeError(PitterException):
         super().__init__(detail, exception_code, self.status_code)
 
 
-class ValidationError(PitterException):
+class UnprocessableEntityError(PitterException):
     default_detail: str = 'Validation error'
     status_code: HTTPStatus = HTTPStatus.UNPROCESSABLE_ENTITY
 

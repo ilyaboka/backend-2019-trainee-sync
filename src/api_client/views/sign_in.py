@@ -26,7 +26,7 @@ class SignInView(APIView):
             [
                 SignInPostResponse.get_schema(),
                 exceptions.BadRequestError.get_schema(),
-                exceptions.ValidationError.get_schema(),
+                exceptions.UnprocessableEntityError.get_schema(),
                 exceptions.InternalServerError.get_schema(),
             ],
         ),
@@ -40,10 +40,10 @@ class SignInView(APIView):
         try:
             user: User = User.objects.get(login=login)
         except User.DoesNotExist as does_not_exist:
-            raise exceptions.ValidationError('Invalid credentials') from does_not_exist
+            raise exceptions.UnprocessableEntityError('Invalid credentials') from does_not_exist
 
         if not user.has_password(request.data['password']):
-            raise exceptions.ValidationError('Invalid credentials')
+            raise exceptions.UnprocessableEntityError('Invalid credentials')
 
         token_bytes: bytes = encode(
             dict(exp=datetime.utcnow() + settings.JSON_WEB_TOKEN_LIFETIME, id=user.id),

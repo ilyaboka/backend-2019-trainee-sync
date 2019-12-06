@@ -31,7 +31,7 @@ class FollowingView(APIView):
                 exceptions.UnauthorizedError.get_schema(),
                 exceptions.NotFoundError.get_schema(),
                 exceptions.ConflictError.get_schema(),
-                exceptions.ValidationError.get_schema(),
+                exceptions.UnprocessableEntityError.get_schema(),
                 exceptions.InternalServerError.get_schema(),
             ],
         ),
@@ -49,7 +49,7 @@ class FollowingView(APIView):
         follower: User = request.token_user
 
         if follower == following:
-            raise exceptions.ValidationError("You can't follow yourself")
+            raise exceptions.UnprocessableEntityError("You can't follow yourself")
 
         try:
             Follower.create_follower(follower, following)

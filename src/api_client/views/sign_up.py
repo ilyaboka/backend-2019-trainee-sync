@@ -25,7 +25,7 @@ class SignUpView(APIView):
                 SignUpPostResponse.get_schema(),
                 exceptions.BadRequestError.get_schema(),
                 exceptions.ConflictError.get_schema(),
-                exceptions.ValidationError.get_schema(),
+                exceptions.UnprocessableEntityError.get_schema(),
                 exceptions.InternalServerError.get_schema(),
             ],
         ),

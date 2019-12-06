@@ -7,8 +7,8 @@ from .exceptions import InternalServerError
 from .exceptions import NotFoundError
 from .exceptions import PitterException
 from .exceptions import UnauthorizedError
+from .exceptions import UnprocessableEntityError
 from .exceptions import UnsupportedMediaTypeError
-from .exceptions import ValidationError
 
 __all__: Sequence[str] = [
     'UnauthorizedError',
@@ -19,5 +19,5 @@ __all__: Sequence[str] = [
     'NotFoundError',
     'PitterException',
     'UnsupportedMediaTypeError',
-    'ValidationError',
+    'UnprocessableEntityError',
 ]
