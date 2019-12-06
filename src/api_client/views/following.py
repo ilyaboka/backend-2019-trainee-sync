@@ -1,4 +1,3 @@
-from http import HTTPStatus
 from typing import Dict
 from typing import Union
 
@@ -24,15 +23,17 @@ class FollowingView(APIView):
     @response_dict_serializer(FollowingPostResponse)
     @swagger_auto_schema(
         request_body=FollowingPostRequest,
-        responses={
-            HTTPStatus.OK.value: FollowingPostResponse,
-            HTTPStatus.BAD_REQUEST.value: exceptions.ExceptionResponse,
-            HTTPStatus.UNAUTHORIZED.value: exceptions.ExceptionResponse,
-            HTTPStatus.NOT_FOUND.value: exceptions.ExceptionResponse,
-            HTTPStatus.CONFLICT.value: exceptions.ExceptionResponse,
-            HTTPStatus.UNPROCESSABLE_ENTITY.value: exceptions.ExceptionResponse,
-            HTTPStatus.INTERNAL_SERVER_ERROR.value: exceptions.ExceptionResponse,
-        },
+        responses=dict(
+            [
+                FollowingPostResponse.get_schema(),
+                exceptions.BadRequestError.get_schema(),
+                exceptions.UnauthorizedError.get_schema(),
+                exceptions.NotFoundError.get_schema(),
+                exceptions.ConflictError.get_schema(),
+                exceptions.ValidationError.get_schema(),
+                exceptions.InternalServerError.get_schema(),
+            ],
+        ),
         operation_summary='Создание подписки',
         operation_description='Создание подписки на аккаунт другого пользователя',
     )

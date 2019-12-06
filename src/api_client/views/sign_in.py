@@ -1,5 +1,4 @@
 from datetime import datetime
-from http import HTTPStatus
 from typing import Dict
 
 from django.conf import settings
@@ -22,12 +21,14 @@ class SignInView(APIView):
     @response_dict_serializer(SignInPostResponse)
     @swagger_auto_schema(
         request_body=SignInPostRequest,
-        responses={
-            HTTPStatus.OK.value: SignInPostResponse,
-            HTTPStatus.BAD_REQUEST.value: exceptions.ExceptionResponse,
-            HTTPStatus.UNPROCESSABLE_ENTITY.value: exceptions.ExceptionResponse,
-            HTTPStatus.INTERNAL_SERVER_ERROR.value: exceptions.ExceptionResponse,
-        },
+        responses=dict(
+            [
+                SignInPostResponse.get_schema(),
+                exceptions.BadRequestError.get_schema(),
+                exceptions.ValidationError.get_schema(),
+                exceptions.InternalServerError.get_schema(),
+            ],
+        ),
         operation_summary='Вход в систему',
         operation_description='Вход в систему, получение JWT',
     )

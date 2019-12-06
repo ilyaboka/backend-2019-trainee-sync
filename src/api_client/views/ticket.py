@@ -1,4 +1,3 @@
-from http import HTTPStatus
 from typing import Dict
 from uuid import uuid4
 
@@ -21,12 +20,14 @@ class TicketMobileView(APIView):
     @swagger_auto_schema(
         tags=['Pitter: mobile'],
         request_body=TicketPostRequest,
-        responses={
-            HTTPStatus.OK.value: TicketPostResponse,
-            HTTPStatus.BAD_REQUEST.value: exceptions.ExceptionResponse,
-            HTTPStatus.UNPROCESSABLE_ENTITY.value: exceptions.ExceptionResponse,
-            HTTPStatus.INTERNAL_SERVER_ERROR.value: exceptions.ExceptionResponse,
-        },
+        responses=dict(
+            [
+                TicketPostResponse.get_schema(),
+                exceptions.BadRequestError.get_schema(),
+                exceptions.ValidationError.get_schema(),
+                exceptions.InternalServerError.get_schema(),
+            ],
+        ),
         operation_summary='Создание заявки',
         operation_description='Создание заявки в сервисе Pitter',
     )

@@ -1,4 +1,3 @@
-from http import HTTPStatus
 from typing import Dict
 
 from drf_yasg.utils import swagger_auto_schema
@@ -22,13 +21,15 @@ class RecognizeView(APIView):
     @response_dict_serializer(RecognizePostResponse)
     @swagger_auto_schema(
         request_body=RecognizePostRequest,
-        responses={
-            HTTPStatus.OK.value: RecognizePostResponse,
-            HTTPStatus.BAD_REQUEST.value: exceptions.ExceptionResponse,
-            HTTPStatus.UNPROCESSABLE_ENTITY.value: exceptions.ExceptionResponse,
-            HTTPStatus.UNSUPPORTED_MEDIA_TYPE.value: exceptions.ExceptionResponse,
-            HTTPStatus.INTERNAL_SERVER_ERROR.value: exceptions.ExceptionResponse,
-        },
+        responses=dict(
+            [
+                RecognizePostResponse.get_schema(),
+                exceptions.BadRequestError.get_schema(),
+                exceptions.ValidationError.get_schema(),
+                exceptions.UnsupportedMediaTypeError.get_schema(),
+                exceptions.InternalServerError.get_schema(),
+            ],
+        ),
         operation_summary='Преобразование речи в текст',
         operation_description='Преобразование речи (FLAC, WAV) в текст с использованием асинхронного сервиса',
     )

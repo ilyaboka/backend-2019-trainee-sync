@@ -1,5 +1,7 @@
 from rest_framework import serializers
 
+from .response_serializer import ResponseSerializer
+
 
 class UserListGetRequest(serializers.Serializer):
     page: serializers.IntegerField = serializers.IntegerField(required=True, label='Номер страницы', min_value=1)
@@ -13,6 +15,6 @@ class User(serializers.Serializer):
     )
 
 
-class UserListGetResponse(serializers.Serializer):
+class UserListGetResponse(ResponseSerializer):
     users: User = User(required=True, many=True)
     hasNextPage: serializers.BooleanField = serializers.BooleanField(required=True)

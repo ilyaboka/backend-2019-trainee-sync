@@ -4,6 +4,8 @@ from rest_framework import serializers
 
 from pitter import exceptions
 
+from .response_serializer import ResponseSerializer
+
 
 class RecognizePostRequest(serializers.Serializer):
     MAXIMAL_MAGIC_BYTE_LENGTH_FOR_ACCEPTED_FILETYPES: int = 12
@@ -24,5 +26,5 @@ class RecognizePostRequest(serializers.Serializer):
         speech_file.open()
 
 
-class RecognizePostResponse(serializers.Serializer):
+class RecognizePostResponse(ResponseSerializer):
     recognizedText = serializers.CharField(required=True, label='Распознанный текст')

@@ -1,6 +1,7 @@
 import traceback
 from http import HTTPStatus
 from typing import Optional
+from typing import Tuple
 
 from django.conf import settings
 from django.http import JsonResponse
@@ -11,6 +12,7 @@ from rest_framework.exceptions import APIException
 class PitterException(APIException):
     default_detail: str = 'Something went wrong.'
     default_code: str = 'ServerError'
+    status_code: HTTPStatus = HTTPStatus.INTERNAL_SERVER_ERROR
 
     def __init__(
         # pylint: disable=bad-continuation
@@ -30,10 +32,12 @@ class PitterException(APIException):
         """Вернуть serializer для исключений"""
         return ExceptionResponse
 
-    @staticmethod
-    def get_schema() -> type:
-        """Вернуть serializer для исключений"""
-        return [self.status_code, ExceptionResponse]
+    # for ancestors
+    @classmethod
+    def get_schema(cls) -> Tuple[int, type]:
+        """Вернуть пару код-serializer для исключений"""
+        schema: Tuple[int, type] = (cls.status_code.value, ExceptionResponse)
+        return schema
 
     def make_response(self) -> JsonResponse:
         """Создать response"""

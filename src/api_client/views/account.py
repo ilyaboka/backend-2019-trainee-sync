@@ -13,12 +13,14 @@ class AccountView(APIView):
     @classmethod
     @access_token_required
     @swagger_auto_schema(
-        responses={
-            HTTPStatus.NO_CONTENT.value: 'Success',
-            HTTPStatus.UNAUTHORIZED.value: exceptions.ExceptionResponse,
-            HTTPStatus.NOT_FOUND.value: exceptions.ExceptionResponse,
-            HTTPStatus.INTERNAL_SERVER_ERROR.value: exceptions.ExceptionResponse,
-        },
+        responses=dict(
+            [
+                (HTTPStatus.NO_CONTENT.value, 'Success'),
+                exceptions.UnauthorizedError.get_schema(),
+                exceptions.NotFoundError.get_schema(),
+                exceptions.InternalServerError.get_schema(),
+            ],
+        ),
         operation_summary='Удаление аккаунта',
         operation_description='Удаление пользовательского аккаунта',
     )

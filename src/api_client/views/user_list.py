@@ -28,13 +28,15 @@ class UserListView(APIView):
     @response_dict_serializer(UserListGetResponse)
     @swagger_auto_schema(
         query_serializer=UserListGetRequest,
-        responses={
-            HTTPStatus.OK.value: 'Success',
-            HTTPStatus.BAD_REQUEST.value: exceptions.ExceptionResponse,
-            HTTPStatus.UNAUTHORIZED.value: exceptions.ExceptionResponse,
-            HTTPStatus.UNPROCESSABLE_ENTITY.value: exceptions.ExceptionResponse,
-            HTTPStatus.INTERNAL_SERVER_ERROR.value: exceptions.ExceptionResponse,
-        },
+        responses=dict(
+            [
+                (HTTPStatus.OK.value, 'Success'),
+                exceptions.BadRequestError.get_schema(),
+                exceptions.UnauthorizedError.get_schema(),
+                exceptions.ValidationError.get_schema(),
+                exceptions.InternalServerError.get_schema(),
+            ],
+        ),
         operation_summary='Получение списка пользователей',
         operation_description='Получение списка всех пользователей',
     )

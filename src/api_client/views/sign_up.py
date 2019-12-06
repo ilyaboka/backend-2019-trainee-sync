@@ -1,4 +1,3 @@
-from http import HTTPStatus
 from typing import Dict
 
 from django.db.utils import IntegrityError
@@ -20,13 +19,15 @@ class SignUpView(APIView):
     @response_dict_serializer(SignUpPostResponse)
     @swagger_auto_schema(
         request_body=SignUpPostRequest,
-        responses={
-            HTTPStatus.OK.value: SignUpPostResponse,
-            HTTPStatus.BAD_REQUEST.value: exceptions.ExceptionResponse,
-            HTTPStatus.CONFLICT.value: exceptions.ExceptionResponse,
-            HTTPStatus.UNPROCESSABLE_ENTITY.value: exceptions.ExceptionResponse,
-            HTTPStatus.INTERNAL_SERVER_ERROR.value: exceptions.ExceptionResponse,
-        },
+        responses=dict(
+            [
+                SignUpPostResponse.get_schema(),
+                exceptions.BadRequestError.get_schema(),
+                exceptions.ConflictError.get_schema(),
+                exceptions.ValidationError.get_schema(),
+                exceptions.InternalServerError.get_schema(),
+            ],
+        ),
         operation_summary='Создание аккаунта',
         operation_description='Создание нового аккаунта',
     )

@@ -1,5 +1,7 @@
 from rest_framework import serializers
 
+from .response_serializer import ResponseSerializer
+
 
 class SignUpPostRequest(serializers.Serializer):
     login: serializers.CharField = serializers.CharField(required=True, label='Логин пользователя', max_length=32)
@@ -8,6 +10,6 @@ class SignUpPostRequest(serializers.Serializer):
     )
 
 
-class SignUpPostResponse(serializers.Serializer):
+class SignUpPostResponse(ResponseSerializer):
     id: serializers.CharField = serializers.CharField(required=True, label='Идентификатор аккаунта', max_length=256)
     login: serializers.CharField = serializers.CharField(required=True, label='Логин пользователя', max_length=32)
