@@ -13,6 +13,7 @@ class AccountView(APIView):
     @classmethod
     @access_token_required
     @swagger_auto_schema(
+        tags=['Pitter: mobile'],
         responses=dict(
             [
                 (HTTPStatus.NO_CONTENT.value, 'Success'),

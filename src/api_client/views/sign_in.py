@@ -20,6 +20,7 @@ class SignInView(APIView):
     @request_body_serializer(SignInPostRequest)
     @response_dict_serializer(SignInPostResponse)
     @swagger_auto_schema(
+        tags=['Pitter: mobile'],
         request_body=SignInPostRequest,
         responses=dict(
             [

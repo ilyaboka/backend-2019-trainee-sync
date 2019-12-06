@@ -27,6 +27,7 @@ class UserListView(APIView):
     @request_query_parameters_serializer(UserListGetRequest)
     @response_dict_serializer(UserListGetResponse)
     @swagger_auto_schema(
+        tags=['Pitter: mobile'],
         query_serializer=UserListGetRequest,
         responses=dict(
             [

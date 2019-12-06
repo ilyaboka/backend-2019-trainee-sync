@@ -20,6 +20,7 @@ class RecognizeView(APIView):
     @request_body_serializer(RecognizePostRequest)
     @response_dict_serializer(RecognizePostResponse)
     @swagger_auto_schema(
+        tags=['Pitter: mobile'],
         request_body=RecognizePostRequest,
         responses=dict(
             [

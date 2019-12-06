@@ -18,6 +18,7 @@ class SignUpView(APIView):
     @request_body_serializer(SignUpPostRequest)
     @response_dict_serializer(SignUpPostResponse)
     @swagger_auto_schema(
+        tags=['Pitter: mobile'],
         request_body=SignUpPostRequest,
         responses=dict(
             [

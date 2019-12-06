@@ -22,6 +22,7 @@ class FollowingView(APIView):
     @request_body_serializer(FollowingPostRequest)
     @response_dict_serializer(FollowingPostResponse)
     @swagger_auto_schema(
+        tags=['Pitter: mobile'],
         request_body=FollowingPostRequest,
         responses=dict(
             [
