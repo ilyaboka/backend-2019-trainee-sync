@@ -53,7 +53,7 @@ class User(BaseModel):
         try:
             password_bytes = password.encode()
         except UnicodeError as unicode_error:
-            raise PitterException('Error while encoding string', 'ServerError') from unicode_error
+            raise exceptions.InternalServerError('Error while encoding string') from unicode_error
         equals: bool = pbkdf2_hmac(
             self.PBKDF2_HMAC_HASH_NAME, password_bytes, self.salt_for_password, self.PBKDF2_HMAC_NUMBER_OF_ITERATIONS
         ) == self.hash_of_password_with_salt.tobytes()  # pylint: disable=no-member
