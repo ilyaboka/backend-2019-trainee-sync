@@ -30,7 +30,7 @@ class AuthorizationMiddleware:
 
         try:
             token_user: str = self.get_user(request.META['HTTP_AUTHORIZATION'])
-        except exceptions.AuthorizationError as authorization_error:
+        except exceptions.UnauthorizedError as authorization_error:
             response = authorization_error.make_response()
             return response
         request.token_user = token_user
@@ -44,28 +44,28 @@ class AuthorizationMiddleware:
         authorization_parts: List[str] = authorization.split()
 
         if len(authorization_parts) != 2:
-            raise exceptions.AuthorizationError('Invalid Authorization header: two parts expected')
+            raise exceptions.UnauthorizedError('Invalid Authorization header: two parts expected')
 
         if authorization_parts[0] != 'Bearer':
-            raise exceptions.AuthorizationError('Invalid authorization type: Bearer expected')
+            raise exceptions.UnauthorizedError('Invalid authorization type: Bearer expected')
 
         token: str = authorization_parts[1]
 
         try:
             token_payload: Dict[str, Any] = decode(token, settings.JSON_WEB_TOKEN_PUBLIC_KEY, algorithms=['RS256'])
         except ExpiredSignatureError as expire_signature_error:
-            raise exceptions.AuthorizationError('Token expired') from expire_signature_error
+            raise exceptions.UnauthorizedError('Token expired') from expire_signature_error
         except InvalidTokenError as invalid_token_error:
-            raise exceptions.AuthorizationError('Invalid token') from invalid_token_error
+            raise exceptions.UnauthorizedError('Invalid token') from invalid_token_error
 
         if 'id' not in token_payload:
-            raise exceptions.AuthorizationError('Invalid token')
+            raise exceptions.UnauthorizedError('Invalid token')
 
         user_id: str = token_payload['id']
 
         try:
             user: User = User.objects.get(id=user_id)
         except User.DoesNotExist:
-            raise exceptions.AuthorizationError('Token user not found')
+            raise exceptions.UnauthorizedError('Token user not found')
 
         return user

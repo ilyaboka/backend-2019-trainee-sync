@@ -1,6 +1,6 @@
 from typing import Sequence
 
-from .exceptions import AuthorizationError
+from .exceptions import UnauthorizedError
 from .exceptions import BadRequestError
 from .exceptions import ConflictError
 from .exceptions import ExceptionResponse
@@ -11,7 +11,7 @@ from .exceptions import UnsupportedMediaTypeError
 from .exceptions import ValidationError
 
 __all__: Sequence[str] = [
-    'AuthorizationError',
+    'UnauthorizedError',
     'BadRequestError',
     'ConflictError',
     'ExceptionResponse',

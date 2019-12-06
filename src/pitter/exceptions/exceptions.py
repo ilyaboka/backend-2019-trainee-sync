@@ -30,6 +30,11 @@ class PitterException(APIException):
         """Вернуть serializer для исключений"""
         return ExceptionResponse
 
+    @staticmethod
+    def get_schema() -> type:
+        """Вернуть serializer для исключений"""
+        return [self.status_code, ExceptionResponse]
+
     def make_response(self) -> JsonResponse:
         """Создать response"""
         json_response: JsonResponse = JsonResponse(
@@ -39,7 +44,7 @@ class PitterException(APIException):
         return json_response
 
 
-class AuthorizationError(PitterException):
+class UnauthorizedError(PitterException):
     default_detail: str = 'Authorization error'
     status_code: HTTPStatus = HTTPStatus.UNAUTHORIZED
 
