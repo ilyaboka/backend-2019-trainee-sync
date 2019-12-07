@@ -35,4 +35,4 @@ class RecognizeView(APIView):
     )
     def post(cls, request: Request) -> Dict[str, str]:
         """Преобразование речи в текст с использованием асинхронного сервиса"""
-        return dict(recognizedText=recognize(request.data['speechFile'].read()),)
+        return dict(recognizedText=recognize(request.data['speechFile'].read()))
