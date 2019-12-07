@@ -4,8 +4,8 @@ from api_client.validation_serializers.response_serializer import ResponseSerial
 
 
 class EmailNotificationsEnabledPostRequest(serializers.Serializer):
-    enabled: serializers.BooleanField = serializers.BooleanField(required=True, label='Флаг email уведомлений')
+    enabled: serializers.BooleanField = serializers.BooleanField(label='Флаг email уведомлений')
 
 
 class EmailNotificationsEnabledGetResponse(ResponseSerializer):
-    enabled: serializers.BooleanField = serializers.BooleanField(required=True, label='Флаг email уведомлений')
+    enabled: serializers.BooleanField = serializers.BooleanField(label='Флаг email уведомлений')
