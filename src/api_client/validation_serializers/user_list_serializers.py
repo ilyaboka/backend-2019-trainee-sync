@@ -4,6 +4,9 @@ from api_client.validation_serializers.response_serializer import ResponseSerial
 
 
 class UserListGetRequest(serializers.Serializer):
+    login_search_string: serializers.CharField = serializers.CharField(
+        required=False, label="Строка для поиска по login'у", max_length=32
+    )
     page: serializers.IntegerField = serializers.IntegerField(required=True, label='Номер страницы', min_value=1)
 
 
