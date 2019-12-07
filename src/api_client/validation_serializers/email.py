@@ -4,8 +4,8 @@ from api_client.validation_serializers.response_serializer import ResponseSerial
 
 
 class EmailPostRequest(serializers.Serializer):
-    email: serializers.EmailField = serializers.EmailField(label='email пользователя')
+    email: serializers.EmailField = serializers.EmailField(required=True, label='email пользователя')
 
 
 class EmailPostResponse(ResponseSerializer):
-    email: serializers.EmailField = serializers.EmailField(label='email пользователя')
+    email: serializers.EmailField = serializers.EmailField(required=True, label='email пользователя')
