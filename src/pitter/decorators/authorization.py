@@ -16,6 +16,6 @@ def access_token_required(handler: Callable[..., Response]) -> Callable[..., Res
     def _wraper(view: View, request: Request, *args: Any, **kwargs: Any) -> Response:
         if request.token_user:
             return handler(view, request, *args, **kwargs)
-        raise exceptions.AuthorizationError('Access token required')
+        raise exceptions.UnauthorizedError('Access token required')
 
     return _wraper

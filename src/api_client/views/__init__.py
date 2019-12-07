@@ -1,15 +1,23 @@
-from typing import Sequence
+from typing import List
 
 from .account import AccountView
+from .email import EmailView
+from .email_notifications_enabled import EmailNotificationsEnabledView
+from .following import FollowingView
 from .recognize import RecognizeView
 from .sign_in import SignInView
 from .sign_up import SignUpView
 from .ticket import TicketMobileView
+from .user_list import UserListView
 
-__all__: Sequence[str] = [
+__all__: List[str] = [
     'AccountView',
+    'EmailView',
+    'EmailNotificationsEnabledView',
+    'FollowingView',
     'RecognizeView',
     'SignInView',
     'SignUpView',
     'TicketMobileView',
+    'UserListView',
 ]

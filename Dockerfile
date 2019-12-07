@@ -13,6 +13,7 @@ WORKDIR ${APP_ROOT}
 RUN mkdir /config
 
 COPY docker-entrypoint.sh /usr/local/bin/
+ENTRYPOINT ["docker-entrypoint.sh"]
 
 ADD token_keys ${APP_ROOT}/token_keys/
 
@@ -22,5 +23,3 @@ RUN pip install --no-cache-dir -U -r /config/requirements.txt && rm /config/requ
 
 
 ADD src ${APP_ROOT}/src/
-
-ENTRYPOINT ["docker-entrypoint.sh"]

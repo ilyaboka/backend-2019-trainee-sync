@@ -3,7 +3,6 @@ from __future__ import annotations
 from typing import Dict
 
 from django.db import models
-from django.db.models import QuerySet
 
 from pitter.models.base import BaseModel
 from pitter.utils import recognize
@@ -15,7 +14,7 @@ class Message(BaseModel):
     speech_transcript = models.TextField()
 
     def to_dict(self) -> Dict[str, str]:
-        """Return dict containig data"""
+        """Вернуть словарь с данными"""
         return dict(
             id=self.id,
             user=self.user,
@@ -25,15 +24,10 @@ class Message(BaseModel):
 
     @staticmethod
     def create_message(user: str, speech_audio_file_path: str) -> Message:
-        """Create new message"""
+        """Создать новое сообщение"""
         speech_transcript = None
         speech_transcript = recognize(open(speech_audio_file_path).read())
         new_message: Message = Message.objects.create(
-            user=user, speech_audio_file_path=speech_audio_file_path, speech_transcript=speech_transcript,
+            user=user, speech_audio_file_path=speech_audio_file_path, speech_transcript=speech_transcript
         )
         return new_message
-
-    @staticmethod
-    def get_messages() -> QuerySet:
-        """Get all message"""
-        return Message.objects.find().order_by('created_at')

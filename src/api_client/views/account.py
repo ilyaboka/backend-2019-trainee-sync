@@ -13,16 +13,19 @@ class AccountView(APIView):
     @classmethod
     @access_token_required
     @swagger_auto_schema(
-        responses={
-            HTTPStatus.NO_CONTENT.value: 'Success',
-            HTTPStatus.UNAUTHORIZED.value: exceptions.ExceptionResponse,
-            HTTPStatus.NOT_FOUND.value: exceptions.ExceptionResponse,
-            HTTPStatus.INTERNAL_SERVER_ERROR.value: exceptions.ExceptionResponse,
-        },
+        tags=['Pitter: mobile'],
+        responses=dict(
+            [
+                (HTTPStatus.NO_CONTENT.value, 'Success'),
+                exceptions.UnauthorizedError.get_schema(),
+                exceptions.InternalServerError.get_schema(),
+            ],
+        ),
         operation_summary='Удаление аккаунта',
         operation_description='Удаление пользовательского аккаунта',
     )
     def delete(cls, request: Request) -> HttpResponse:
         """Удаление пользовательского аккаунта"""
         request.token_user.delete()
-        return HttpResponse(status=HTTPStatus.NO_CONTENT.value)
+        response: HttpResponse = HttpResponse(status=HTTPStatus.NO_CONTENT.value)
+        return response

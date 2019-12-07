@@ -8,7 +8,7 @@ from typing import Union
 from django.db import models
 from django.db.models import QuerySet
 
-from pitter.exceptions import PitterException
+from pitter import exceptions
 from pitter.models.base import BaseModel
 
 
@@ -30,13 +30,13 @@ class User(BaseModel):
         try:
             password_bytes = password.encode()
         except UnicodeError as unicode_error:
-            raise PitterException('Error while encoding string', 'ServerError') from unicode_error
+            raise exceptions.InternalServerError('Error while encoding string') from unicode_error
 
         salt_for_password = urandom(cls.SALT_FOR_PASSWORD_LENGTH)
         new_user: User = User.objects.create(
             login=login,
             hash_of_password_with_salt=pbkdf2_hmac(
-                cls.PBKDF2_HMAC_HASH_NAME, password_bytes, salt_for_password, cls.PBKDF2_HMAC_NUMBER_OF_ITERATIONS,
+                cls.PBKDF2_HMAC_HASH_NAME, password_bytes, salt_for_password, cls.PBKDF2_HMAC_NUMBER_OF_ITERATIONS
             ),
             salt_for_password=salt_for_password,
             email_notifications_enabled=False,
@@ -45,17 +45,17 @@ class User(BaseModel):
 
     @staticmethod
     def get_users() -> QuerySet:
-        """Получить всех пользователей"""
-        return User.objects.find().order_by('created_at')
+        """Получить всех пользователей в порядке их создания"""
+        return User.objects.all().order_by('created_at')
 
     def has_password(self, password: str) -> bool:
         """Проверить пароль пользователя"""
         try:
             password_bytes = password.encode()
         except UnicodeError as unicode_error:
-            raise PitterException('Error while encoding string', 'ServerError') from unicode_error
+            raise exceptions.InternalServerError('Error while encoding string') from unicode_error
         equals: bool = pbkdf2_hmac(
-            self.PBKDF2_HMAC_HASH_NAME, password_bytes, self.salt_for_password, self.PBKDF2_HMAC_NUMBER_OF_ITERATIONS,
+            self.PBKDF2_HMAC_HASH_NAME, password_bytes, self.salt_for_password, self.PBKDF2_HMAC_NUMBER_OF_ITERATIONS
         ) == self.hash_of_password_with_salt.tobytes()  # pylint: disable=no-member
         return equals
 
