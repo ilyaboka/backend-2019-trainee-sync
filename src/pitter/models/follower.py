@@ -20,10 +20,6 @@ class Follower(BaseModel):
             models.CheckConstraint(check=~Q(follower__exact=F('following')), name='forbid to follow yourself'),
         ]
 
-    def to_dict(self) -> Dict[str, str]:
-        """Вернуть словарь данных"""
-        return dict(id=self.id, follower=self.follower, following=self.following)
-
     @staticmethod
     def create_follower(follower: User, following: User) -> Follower:
         """Создать нового подписчика"""

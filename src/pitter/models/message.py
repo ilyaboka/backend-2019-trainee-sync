@@ -13,15 +13,6 @@ class Message(BaseModel):
     speech_audio_file_path = models.CharField(max_length=256)
     speech_transcript = models.TextField()
 
-    def to_dict(self) -> Dict[str, str]:
-        """Вернуть словарь с данными"""
-        return dict(
-            id=self.id,
-            user=self.user,
-            speech_audio_file_path=self.speech_audio_file_path,
-            speech_transcript=self.speech_transcript,
-        )
-
     @staticmethod
     def create_message(user: str, speech_audio_file_path: str) -> Message:
         """Создать новое сообщение"""
