@@ -47,11 +47,11 @@ class UserListView(APIView):
         """Make response containg a list of users"""
         users: QuerySet = User.get_users().values('id', 'login', 'name')
 
-        if 'login_search_string' in request.query_params:
-            users = users.filter(login__icontains=request.query_params['login_search_string'])
+        if 'loginSearchString' in request.query_params:
+            users = users.filter(login__icontains=request.query_params['loginSearchString'])
             if not users:
                 raise exceptions.NotFoundError(
-                    f"Users with names containing {request.query_params['login_search_string']} not found"
+                    f"Users with names containing {request.query_params['loginSearchString']} not found"
                 )
 
         paginator: Paginator = Paginator(users, cls.PAGE_SIZE)
