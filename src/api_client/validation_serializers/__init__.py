@@ -1,5 +1,9 @@
 from typing import List
 
+from .email import EmailPostRequest
+from .email import EmailPostResponse
+from .email_notifications_enabled import EmailNotificationsEnabledGetResponse
+from .email_notifications_enabled import EmailNotificationsEnabledPostRequest
 from .following_serializers import FollowingRequest
 from .following_serializers import FollowingResponse
 from .recognize_serializers import RecognizePostRequest
@@ -14,6 +18,10 @@ from .user_list_serializers import UserListGetRequest
 from .user_list_serializers import UserListGetResponse
 
 __all__: List[str] = [
+    'EmailNotificationsEnabledGetResponse',
+    'EmailNotificationsEnabledPostRequest',
+    'EmailPostRequest',
+    'EmailPostResponse',
     'FollowingRequest',
     'FollowingResponse',
     'RecognizePostRequest',

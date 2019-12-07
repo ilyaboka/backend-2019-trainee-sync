@@ -13,7 +13,7 @@ from rest_framework.views import exception_handler
 
 from pitter import exceptions
 
-LOGGER: logging.Logger = logging.getLogger(__name__)
+logger: logging.Logger = logging.getLogger(__name__)
 
 
 class ErrorHandlerMiddleware:
@@ -30,7 +30,7 @@ class ErrorHandlerMiddleware:
         # pylint: disable=no-self-use,unused-argument
         """Вернуть JsonResponse или None из exception"""
         if not isinstance(exception, exceptions.PitterException):
-            LOGGER.exception(traceback.format_exc())
+            logger.exception(traceback.format_exc())
             return exceptions.InternalServerError(message=str(exception)).make_response()
         return None
 
@@ -40,7 +40,7 @@ def custom_exception_handler(exception: exceptions.PitterException, context: Dic
     response = exception_handler(exception, context)
 
     if settings.DEBUG:
-        LOGGER.exception(traceback.format_exc())
+        logger.exception(traceback.format_exc())
 
     if response is not None and hasattr(response, 'data'):
         if hasattr(response.data['detail'], 'code'):

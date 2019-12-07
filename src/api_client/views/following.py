@@ -14,6 +14,7 @@ from pitter.decorators import request_body_serializer
 from pitter.decorators import response_dict_serializer
 from pitter.models import Follower
 from pitter.models import User
+from pitter.utils import send_mail_in_new_thread
 
 
 class FollowingView(APIView):
@@ -94,6 +95,13 @@ class FollowingView(APIView):
             Follower.create_follower(follower, following)
         except IntegrityError as integrity_error:
             raise exceptions.ConflictError(f'You already follow user with id {following_id}') from integrity_error
+
+        if following.email_notifications_enabled:
+            send_mail_in_new_thread(
+                f'User {follower.login} follows you',
+                f'User {follower.login} follows you on Pitter',
+                following.email_address,
+            )
 
         response: Dict[str, Union[bool, str]] = dict(follow=True, id=following_id)
         return response

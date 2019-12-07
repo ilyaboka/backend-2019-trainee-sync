@@ -114,6 +114,12 @@ SWAGGER_SETTINGS: Dict[str, Union[Dict[str, Dict[str, str]], bool]] = {
 
 ASYNCHRONOUS_SERVICE_URL: str = 'http://pitter_async:8118/api/pitter/v1/recognize'
 
+EMAIL_HOST: str = os.getenv('EMAIL_HOST', 'localhost')
+EMAIL_PORT: int = int(os.getenv('EMAIL_PORT', '25'))
+EMAIL_HOST_USER: str = os.getenv('EMAIL_HOST_USER', '')
+EMAIL_HOST_PASSWORD: str = os.getenv('EMAIL_HOST_PASSWORD', '')
+EMAIL_USE_SSL: bool = bool(os.getenv('EMAIL_USE_SSL', 'False'))
+
 JSON_WEB_TOKEN_LIFETIME: timedelta = timedelta(hours=1)
 
 JSON_WEB_TOKEN_PRIVATE_KEY: bytes = open('token_keys/id_rsa', 'rb').read()

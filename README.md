@@ -2,6 +2,10 @@
 
 ### Sync service for Pitter project
 
+For sending emails set EMAIL\_HOST, EMAIL\_PORT, EMAIL\_HOST\_USER, EMAIL\_HOST\_PASSWORD and EMAIL\_USE\_SSL
+in local.env file.
+If you using gmail enable [less secure app access](https://myaccount.google.com/security).
+
 
 ### Usage
 

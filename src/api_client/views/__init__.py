@@ -1,6 +1,8 @@
 from typing import List
 
 from .account import AccountView
+from .email import EmailView
+from .email_notifications_enabled import EmailNotificationsEnabledView
 from .following import FollowingView
 from .recognize import RecognizeView
 from .sign_in import SignInView
@@ -10,6 +12,8 @@ from .user_list import UserListView
 
 __all__: List[str] = [
     'AccountView',
+    'EmailView',
+    'EmailNotificationsEnabledView',
     'FollowingView',
     'RecognizeView',
     'SignInView',
