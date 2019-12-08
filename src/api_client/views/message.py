@@ -87,7 +87,9 @@ class MessageView(APIView):
         ]
         send_mail_in_new_thread(
             f'User {request.token_user.login} publish new message',
-            f'{request.token_user.login} publish new message:\n"{new_message.speech_transcript}"',
+            f'{request.token_user.login} publish new message:\n'
+            f'{new_message.speech_transcript}\n'
+            f'{request.build_absolute_uri(new_message.speech_audio_file.url)}',
             followers_mail_addresses,
         )
 
