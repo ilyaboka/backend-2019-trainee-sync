@@ -3,6 +3,7 @@ from typing import List
 from .exceptions import BadRequestError
 from .exceptions import ConflictError
 from .exceptions import ExceptionResponse
+from .exceptions import ForbiddenError
 from .exceptions import InternalServerError
 from .exceptions import NotFoundError
 from .exceptions import PitterException
@@ -15,6 +16,7 @@ __all__: List[str] = [
     'BadRequestError',
     'ConflictError',
     'ExceptionResponse',
+    'ForbiddenError',
     'InternalServerError',
     'NotFoundError',
     'PitterException',

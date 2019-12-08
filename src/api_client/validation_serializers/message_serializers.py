@@ -6,6 +6,10 @@ from api_client.validation_serializers.response_serializer import ResponseSerial
 from pitter import exceptions
 
 
+class MessageDeleteRequest(serializers.Serializer):
+    id: serializers.CharField = serializers.CharField(required=True, label='Идентификатор сообщения', max_length=256)
+
+
 class MessagePostRequest(serializers.Serializer):
     MAXIMAL_MAGIC_BYTE_LENGTH_FOR_ACCEPTED_FILETYPES: int = 12
     audioMessageFile: serializers.FileField = serializers.FileField(

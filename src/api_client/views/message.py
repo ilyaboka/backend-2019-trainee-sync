@@ -1,21 +1,59 @@
+from http import HTTPStatus
 from typing import Dict
 
+from django.http import HttpResponse
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.parsers import MultiPartParser
 from rest_framework.request import Request
 from rest_framework.views import APIView
 
+from api_client.validation_serializers import MessageDeleteRequest
 from api_client.validation_serializers import MessagePostRequest
 from api_client.validation_serializers import MessagePostResponse
 from pitter import exceptions
 from pitter.decorators import access_token_required
 from pitter.decorators import request_body_serializer
+from pitter.decorators import request_query_parameters_serializer
 from pitter.decorators import response_dict_serializer
 from pitter.models import Message
 
 
 class MessageView(APIView):
     parser_classes = [MultiPartParser]
+
+    @classmethod
+    @access_token_required
+    @request_query_parameters_serializer(MessageDeleteRequest)
+    @swagger_auto_schema(
+        tags=['Pitter: mobile'],
+        query_serializer=MessageDeleteRequest,
+        responses=dict(
+            [
+                (HTTPStatus.NO_CONTENT.value, 'Success'),
+                exceptions.BadRequestError.get_schema(),
+                exceptions.UnauthorizedError.get_schema(),
+                exceptions.ForbiddenError.get_schema(),
+                exceptions.NotFoundError.get_schema(),
+                exceptions.InternalServerError.get_schema(),
+            ],
+        ),
+        operation_summary='Удаление сообщения',
+        operation_description='Удаление сообщения по id',
+    )
+    def delete(cls, request: Request) -> HttpResponse:
+        """Создание сообщения"""
+        message_id: str = request.query_params['id']
+        try:
+            message = Message.objects.get(id=message_id)
+        except Message.DoesNotExist:
+            raise exceptions.NotFoundError(f'Message with id: {message_id} not found')
+
+        if message.user != request.token_user:
+            raise exceptions.ForbiddenError("You can't delete other people messages")
+
+        message.delete()
+        response: HttpResponse = HttpResponse(status=HTTPStatus.NO_CONTENT.value)
+        return response
 
     @classmethod
     @access_token_required
@@ -27,8 +65,8 @@ class MessageView(APIView):
         responses=dict(
             [
                 MessagePostResponse.get_schema(),
-                exceptions.UnauthorizedError.get_schema(),
                 exceptions.BadRequestError.get_schema(),
+                exceptions.UnauthorizedError.get_schema(),
                 exceptions.UnsupportedMediaTypeError.get_schema(),
                 exceptions.InternalServerError.get_schema(),
             ],
