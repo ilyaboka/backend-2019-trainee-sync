@@ -94,6 +94,6 @@ class MessageView(APIView):
         )
 
         response: Dict[str, str] = dict(
-            id=new_message.id, recognizedText=new_message.speech_transcript, user_id=new_message.user.id
+            id=new_message.id, speechTranscript=new_message.speech_transcript, user_id=new_message.user.id
         )
         return response

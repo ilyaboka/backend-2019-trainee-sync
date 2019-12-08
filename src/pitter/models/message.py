@@ -7,6 +7,7 @@ from django.db import models
 from django.dispatch import receiver
 
 from pitter.models.base import BaseModel
+from pitter.models.user import User
 from pitter.utils import recognize
 
 

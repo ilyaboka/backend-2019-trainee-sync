@@ -31,4 +31,4 @@ class MessagePostRequest(serializers.Serializer):
 
 class MessagePostResponse(ResponseSerializer):
     id: serializers.CharField = serializers.CharField(required=True, label='Идентификатор сообщения', max_length=256)
-    recognizedText = serializers.CharField(required=True, label='Распознанный текст')
+    speechTranscript = serializers.CharField(required=True, label='Распознанный текст')
