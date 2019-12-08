@@ -99,8 +99,8 @@ class FollowingView(APIView):
 
         if following.email_notifications_enabled:
             send_mail_in_new_thread(
-                f'User {follower.login} follows you',
-                f'User {follower.login} follows you on Pitter',
+                f'User {follower.name} follows you',
+                f'User {follower.name} follows you on Pitter',
                 [following.email_address],
             )
 

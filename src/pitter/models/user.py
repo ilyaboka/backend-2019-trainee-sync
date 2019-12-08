@@ -38,6 +38,7 @@ class User(BaseModel):
             ),
             salt_for_password=salt_for_password,
             email_notifications_enabled=False,
+            name=login,
         )
         return new_user
 
