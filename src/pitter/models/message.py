@@ -13,7 +13,7 @@ from pitter.utils import recognize
 class Message(BaseModel):
     speech_audio_file: models.FileField = models.FileField()
     speech_transcript: models.TextField = models.TextField()
-    user: models.ForeignKey = models.ForeignKey('User', on_delete=models.CASCADE)
+    user: models.ForeignKey = models.ForeignKey(User, on_delete=models.CASCADE)
 
     @staticmethod
     def create_message(user: str, speech_audio_file: UploadedFile) -> Message:
