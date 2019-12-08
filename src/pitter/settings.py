@@ -56,6 +56,8 @@ JSON_WEB_TOKEN_PUBLIC_KEY: bytes = open('token_keys/id_rsa.pub', 'rb').read()
 
 LANGUAGE_CODE: str = 'en-us'
 
+MEDIA_ROOT: str = '/var/www/media'
+
 MIDDLEWARE: List[str] = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

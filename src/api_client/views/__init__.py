@@ -4,6 +4,7 @@ from .account import AccountView
 from .email import EmailView
 from .email_notifications_enabled import EmailNotificationsEnabledView
 from .following import FollowingView
+from .message import MessageView
 from .recognize import RecognizeView
 from .sign_in import SignInView
 from .sign_up import SignUpView
@@ -15,6 +16,7 @@ __all__: List[str] = [
     'EmailView',
     'EmailNotificationsEnabledView',
     'FollowingView',
+    'MessageView',
     'RecognizeView',
     'SignInView',
     'SignUpView',

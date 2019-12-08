@@ -6,6 +6,8 @@ from .email_notifications_enabled import EmailNotificationsEnabledGetResponse
 from .email_notifications_enabled import EmailNotificationsEnabledPostRequest
 from .following_serializers import FollowingRequest
 from .following_serializers import FollowingResponse
+from .message_serializers import MessagePostRequest
+from .message_serializers import MessagePostResponse
 from .recognize_serializers import RecognizePostRequest
 from .recognize_serializers import RecognizePostResponse
 from .sign_in_serializers import SignInPostRequest
@@ -24,6 +26,8 @@ __all__: List[str] = [
     'EmailPostResponse',
     'FollowingRequest',
     'FollowingResponse',
+    'MessagePostRequest',
+    'MessagePostResponse',
     'RecognizePostRequest',
     'RecognizePostResponse',
     'SignInPostRequest',
