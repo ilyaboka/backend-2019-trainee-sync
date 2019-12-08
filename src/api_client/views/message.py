@@ -1,5 +1,6 @@
 from http import HTTPStatus
 from typing import Dict
+from typing import List
 
 from django.http import HttpResponse
 from drf_yasg.utils import swagger_auto_schema
@@ -16,6 +17,7 @@ from pitter.decorators import request_body_serializer
 from pitter.decorators import request_query_parameters_serializer
 from pitter.decorators import response_dict_serializer
 from pitter.models import Message
+from pitter.utils import send_mail_in_new_thread
 
 
 class MessageView(APIView):
@@ -77,4 +79,16 @@ class MessageView(APIView):
     def post(cls, request: Request) -> Dict[str, str]:
         """Создание сообщения"""
         new_message: Message = Message.create_message(request.token_user, request.data['audioMessageFile'])
+
+        followers_mail_addresses: List[str] = [
+            follow.follower.email_address
+            for follow in request.token_user.followers.all()
+            if follow.follower.email_notifications_enabled
+        ]
+        send_mail_in_new_thread(
+            f'User {request.token_user.login} publish new message',
+            f'{request.token_user.login} publish new message:\n"{new_message.speech_transcript}"',
+            followers_mail_addresses,
+        )
+
         return dict(id=new_message.id, recognizedText=new_message.speech_transcript, user_id=new_message.user.id)

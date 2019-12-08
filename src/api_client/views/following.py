@@ -101,7 +101,7 @@ class FollowingView(APIView):
             send_mail_in_new_thread(
                 f'User {follower.login} follows you',
                 f'User {follower.login} follows you on Pitter',
-                following.email_address,
+                [following.email_address],
             )
 
         response: Dict[str, Union[bool, str]] = dict(follow=True, id=following_id)
