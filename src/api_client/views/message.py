@@ -43,7 +43,7 @@ class MessageView(APIView):
         operation_description='Удаление сообщения по id',
     )
     def delete(cls, request: Request) -> HttpResponse:
-        """Создание сообщения"""
+        """Удаление сообщения"""
         message_id: str = request.query_params['id']
         try:
             message = Message.objects.get(id=message_id)
