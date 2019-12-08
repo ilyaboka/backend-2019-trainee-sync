@@ -4,9 +4,6 @@ services:
     build: ../backend-2019-trainee-async
     env_file:
       - ../backend-2019-trainee-async/local.env
-    depends_on:
-      - redis
-      - postgresql
     ports:
       - 8118:8118
   pitter_sync:
@@ -15,13 +12,9 @@ services:
       - local.env
     depends_on:
       - pitter_async
-      - redis
       - postgresql
     ports:
       - 8000:8000
-  redis:
-    image: redis
-    command: redis-server --appendonly yes
   postgresql:
     image: postgres
     environment:
