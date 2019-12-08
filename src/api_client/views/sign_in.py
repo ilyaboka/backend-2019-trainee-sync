@@ -57,4 +57,5 @@ class SignInView(APIView):
         except UnicodeError as unicode_error:
             raise exceptions.InternalServerError('Token contains non-ascii symbols') from unicode_error
 
-        return dict(token=token_string)
+        response: Dict[str, str] = dict(token=token_string)
+        return response

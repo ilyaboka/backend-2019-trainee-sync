@@ -43,9 +43,10 @@ class TicketMobileView(APIView):
         )
         result_dict: dict = result.to_dict()
 
-        return dict(
+        response: Dict[str, str] = dict(
             id=result_dict["id"],
             fakeId=result_dict["fake_id"],
             message=result_dict["message"],
             userComment=result_dict["user_comment"],
         )
+        return response

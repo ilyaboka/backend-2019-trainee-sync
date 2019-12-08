@@ -91,4 +91,7 @@ class MessageView(APIView):
             followers_mail_addresses,
         )
 
-        return dict(id=new_message.id, recognizedText=new_message.speech_transcript, user_id=new_message.user.id)
+        response: Dict[str, str] = dict(
+            id=new_message.id, recognizedText=new_message.speech_transcript, user_id=new_message.user.id
+        )
+        return response

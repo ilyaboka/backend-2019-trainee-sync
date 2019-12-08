@@ -65,4 +65,5 @@ class UserListView(APIView):
         users_on_page: List[User] = list(page)
         has_next_page: bool = page.has_next()
 
-        return dict(users=users_on_page, hasNextPage=has_next_page)
+        response: Dict[str, Union[List[User], bool]] = dict(users=users_on_page, hasNextPage=has_next_page)
+        return response
