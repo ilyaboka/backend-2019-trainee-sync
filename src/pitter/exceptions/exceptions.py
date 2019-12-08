@@ -49,17 +49,6 @@ class PitterException(APIException):
         return json_response
 
 
-class UnauthorizedError(PitterException):
-    default_detail: str = 'Authorization error'
-    status_code: HTTPStatus = HTTPStatus.UNAUTHORIZED
-
-    def __init__(self, message: Optional[str] = None) -> None:
-        """Создать новое исключение"""
-        detail: str = message if message else self.default_detail
-        exception_code: str = self.__class__.__name__
-        super().__init__(detail, exception_code, self.status_code)
-
-
 class BadRequestError(PitterException):
     default_detail: str = 'Bad request error'
     status_code: HTTPStatus = HTTPStatus.BAD_REQUEST
@@ -88,6 +77,17 @@ class ExceptionResponse(serializers.Serializer):
     debug: serializers.CharField = serializers.CharField(required=False, allow_null=True)
 
 
+class ForbiddenError(PitterException):
+    default_detail: str = 'Forbidden'
+    status_code: HTTPStatus = HTTPStatus.FORBIDDEN
+
+    def __init__(self, message: Optional[str] = None) -> None:
+        """Создать новое исключение"""
+        detail: str = message if message else self.default_detail
+        exception_code: str = self.__class__.__name__
+        super().__init__(detail, exception_code, self.status_code)
+
+
 class InternalServerError(PitterException):
     default_detail: str = 'Internal server error'
 
@@ -101,6 +101,17 @@ class InternalServerError(PitterException):
 class NotFoundError(PitterException):
     default_detail: str = 'Not found'
     status_code: HTTPStatus = HTTPStatus.NOT_FOUND
+
+    def __init__(self, message: Optional[str] = None) -> None:
+        """Создать новое исключение"""
+        detail: str = message if message else self.default_detail
+        exception_code: str = self.__class__.__name__
+        super().__init__(detail, exception_code, self.status_code)
+
+
+class UnauthorizedError(PitterException):
+    default_detail: str = 'Authorization error'
+    status_code: HTTPStatus = HTTPStatus.UNAUTHORIZED
 
     def __init__(self, message: Optional[str] = None) -> None:
         """Создать новое исключение"""

@@ -26,6 +26,7 @@ class RecognizeView(APIView):
             [
                 RecognizePostResponse.get_schema(),
                 exceptions.BadRequestError.get_schema(),
+                exceptions.UnauthorizedError.get_schema(),
                 exceptions.UnsupportedMediaTypeError.get_schema(),
                 exceptions.InternalServerError.get_schema(),
             ],
@@ -35,4 +36,5 @@ class RecognizeView(APIView):
     )
     def post(cls, request: Request) -> Dict[str, str]:
         """Преобразование речи в текст с использованием асинхронного сервиса"""
-        return dict(recognizedText=recognize(request.data['speechFile'].read()),)
+        response: Dict[str, str] = dict(recognizedText=recognize(request.data['speechFile'].read()))
+        return response

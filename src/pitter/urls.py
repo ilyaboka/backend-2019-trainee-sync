@@ -1,3 +1,5 @@
+from django.conf import settings
+from django.conf.urls.static import static
 from django.urls import include
 from django.urls import path
 from drf_yasg import openapi
@@ -15,4 +17,4 @@ API_V1_URLS = [path('mobile/', include(('api_client.urls', 'pitter_client'), nam
 urlpatterns = [  # pylint: disable=invalid-name
     path('api/pitter/v1/', include((API_V1_URLS, 'pitter'), namespace='v1')),
     path('api/pitter/swagger/', SchemaView.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

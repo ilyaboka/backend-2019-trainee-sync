@@ -24,6 +24,7 @@ class SignUpView(APIView):
             [
                 SignUpPostResponse.get_schema(),
                 exceptions.BadRequestError.get_schema(),
+                exceptions.UnauthorizedError.get_schema(),
                 exceptions.ConflictError.get_schema(),
                 exceptions.InternalServerError.get_schema(),
             ],
@@ -41,4 +42,5 @@ class SignUpView(APIView):
         except IntegrityError as integrity_error:
             raise exceptions.ConflictError(f'Login {login} already in use') from integrity_error
 
-        return dict(id=user.id, login=user.login,)
+        response: Dict[str, str] = dict(id=user.id, login=user.login)
+        return response

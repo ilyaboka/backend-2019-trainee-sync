@@ -1,9 +1,11 @@
 from .follower import Follower
+from .message import Message
 from .ticket import Ticket
 from .user import User
 
 __all__ = [
     'Follower',
-    'User',
+    'Message',
     'Ticket',
+    'User',
 ]

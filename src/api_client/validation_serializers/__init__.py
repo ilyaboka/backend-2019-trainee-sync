@@ -4,8 +4,13 @@ from .email import EmailPostRequest
 from .email import EmailPostResponse
 from .email_notifications_enabled import EmailNotificationsEnabledGetResponse
 from .email_notifications_enabled import EmailNotificationsEnabledPostRequest
+from .feed_serializers import FeedGetRequest
+from .feed_serializers import FeedGetResponse
 from .following_serializers import FollowingRequest
 from .following_serializers import FollowingResponse
+from .message_serializers import MessageDeleteRequest
+from .message_serializers import MessagePostRequest
+from .message_serializers import MessagePostResponse
 from .recognize_serializers import RecognizePostRequest
 from .recognize_serializers import RecognizePostResponse
 from .sign_in_serializers import SignInPostRequest
@@ -22,8 +27,13 @@ __all__: List[str] = [
     'EmailNotificationsEnabledPostRequest',
     'EmailPostRequest',
     'EmailPostResponse',
+    'FeedGetRequest',
+    'FeedGetResponse',
     'FollowingRequest',
     'FollowingResponse',
+    'MessageDeleteRequest',
+    'MessagePostRequest',
+    'MessagePostResponse',
     'RecognizePostRequest',
     'RecognizePostResponse',
     'SignInPostRequest',

@@ -1,33 +1,31 @@
 from __future__ import annotations
 
-from typing import Dict
+from typing import Any
 
+from django.core.files.uploadedfile import UploadedFile
 from django.db import models
+from django.dispatch import receiver
 
 from pitter.models.base import BaseModel
+from pitter.models.user import User
 from pitter.utils import recognize
 
 
 class Message(BaseModel):
-    user = models.ForeignKey('User', on_delete=models.CASCADE)
-    speech_audio_file_path = models.CharField(max_length=256)
-    speech_transcript = models.TextField()
-
-    def to_dict(self) -> Dict[str, str]:
-        """Вернуть словарь с данными"""
-        return dict(
-            id=self.id,
-            user=self.user,
-            speech_audio_file_path=self.speech_audio_file_path,
-            speech_transcript=self.speech_transcript,
-        )
+    speech_audio_file: models.FileField = models.FileField()
+    speech_transcript: models.TextField = models.TextField()
+    user: models.ForeignKey = models.ForeignKey(User, on_delete=models.CASCADE)
 
     @staticmethod
-    def create_message(user: str, speech_audio_file_path: str) -> Message:
+    def create_message(user: str, speech_audio_file: UploadedFile) -> Message:
         """Создать новое сообщение"""
-        speech_transcript = None
-        speech_transcript = recognize(open(speech_audio_file_path).read())
         new_message: Message = Message.objects.create(
-            user=user, speech_audio_file_path=speech_audio_file_path, speech_transcript=speech_transcript
+            speech_audio_file=speech_audio_file, speech_transcript=recognize(speech_audio_file.read()), user=user
         )
         return new_message
+
+
+@receiver(models.signals.post_delete, sender=Message)
+def delete_speech_audio_file(sender: type, instance: Message, **kwargs: Any) -> None:  # pylint: disable=unused-argument
+    """Удалить аудиофайл после удаления сообщения"""
+    instance.speech_audio_file.delete(save=False)
