@@ -1,4 +1,3 @@
-from http import HTTPStatus
 from typing import Dict
 from typing import List
 from typing import Union
@@ -32,7 +31,7 @@ class UserListView(APIView):
         query_serializer=UserListGetRequest,
         responses=dict(
             [
-                (HTTPStatus.OK.value, 'Success'),
+                UserListGetResponse.get_schema(),
                 exceptions.BadRequestError.get_schema(),
                 exceptions.UnauthorizedError.get_schema(),
                 exceptions.NotFoundError.get_schema(),
@@ -43,7 +42,7 @@ class UserListView(APIView):
         operation_summary='Получение списка пользователей',
         operation_description='Получение списка всех пользователей',
     )
-    def get(cls, request: Request) -> Dict[str, Union[List[User], bool]]:
+    def get(cls, request: Request) -> Dict[str, Union[List[Dict[str, str]], bool]]:
         """Make response containg a list of users"""
         users: QuerySet = User.get_users().values('id', 'login', 'name')
 
@@ -62,8 +61,8 @@ class UserListView(APIView):
         except InvalidPage as invalid_page:
             raise exceptions.UnprocessableEntityError(f'Invalid page number: {page_number}') from invalid_page
 
-        users_on_page: List[User] = list(page)
+        users_on_page: List[Dict[str, str]] = list(page)
         has_next_page: bool = page.has_next()
 
-        response: Dict[str, Union[List[User], bool]] = dict(users=users_on_page, hasNextPage=has_next_page)
+        response: Dict[str, Union[List[Dict[str, str]], bool]] = dict(users=users_on_page, hasNextPage=has_next_page)
         return response
