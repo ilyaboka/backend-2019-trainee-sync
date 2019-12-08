@@ -11,6 +11,7 @@ from api_client.validation_serializers import FollowingResponse
 from pitter import exceptions
 from pitter.decorators import access_token_required
 from pitter.decorators import request_body_serializer
+from pitter.decorators import request_query_parameters_serializer
 from pitter.decorators import response_dict_serializer
 from pitter.models import Follower
 from pitter.models import User
@@ -20,11 +21,11 @@ from pitter.utils import send_mail_in_new_thread
 class FollowingView(APIView):
     @classmethod
     @access_token_required
-    @request_body_serializer(FollowingRequest)
+    @request_query_parameters_serializer(FollowingRequest)
     @response_dict_serializer(FollowingResponse)
     @swagger_auto_schema(
         tags=['Pitter: mobile'],
-        request_body=FollowingRequest,
+        query_serializer=FollowingRequest,
         responses=dict(
             [
                 FollowingResponse.get_schema(),
@@ -39,7 +40,7 @@ class FollowingView(APIView):
     )
     def delete(cls, request: Request) -> Dict[str, Union[bool, str]]:
         """Удаление подписки"""
-        unfollowing_id: str = request.data['id']
+        unfollowing_id: str = request.query_params['id']
         try:
             unfollowing: User = User.objects.get(id=unfollowing_id)
         except User.DoesNotExist:
