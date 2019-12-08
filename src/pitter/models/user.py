@@ -2,8 +2,6 @@ from __future__ import annotations
 
 from hashlib import pbkdf2_hmac
 from os import urandom
-from typing import Dict
-from typing import Union
 
 from django.db import models
 from django.db.models import QuerySet
@@ -58,15 +56,3 @@ class User(BaseModel):
             self.PBKDF2_HMAC_HASH_NAME, password_bytes, self.salt_for_password, self.PBKDF2_HMAC_NUMBER_OF_ITERATIONS
         ) == self.hash_of_password_with_salt.tobytes()  # pylint: disable=no-member
         return equals
-
-    def to_dict(self) -> Dict[str, Union[bool, bytes, str]]:
-        """Вернуть словарь с данными"""
-        return dict(
-            id=self.id,
-            login=self.login,
-            hash_of_password_with_salt=self.hash_of_password_with_salt,
-            salt_for_password=self.salt_for_password,
-            email_address=self.email_address,
-            email_notifications_enabled=self.email_notifications_enabled,
-            name=self.name,
-        )
