@@ -26,6 +26,7 @@ class SignInView(APIView):
             [
                 SignInPostResponse.get_schema(),
                 exceptions.BadRequestError.get_schema(),
+                exceptions.UnauthorizedError.get_schema(),
                 exceptions.UnprocessableEntityError.get_schema(),
                 exceptions.InternalServerError.get_schema(),
             ],

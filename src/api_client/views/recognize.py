@@ -26,6 +26,7 @@ class RecognizeView(APIView):
             [
                 RecognizePostResponse.get_schema(),
                 exceptions.BadRequestError.get_schema(),
+                exceptions.UnauthorizedError.get_schema(),
                 exceptions.UnsupportedMediaTypeError.get_schema(),
                 exceptions.InternalServerError.get_schema(),
             ],

@@ -24,6 +24,7 @@ class TicketMobileView(APIView):
             [
                 TicketPostResponse.get_schema(),
                 exceptions.BadRequestError.get_schema(),
+                exceptions.UnauthorizedError.get_schema(),
                 exceptions.InternalServerError.get_schema(),
             ],
         ),
