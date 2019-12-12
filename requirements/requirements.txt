@@ -1,5 +1,5 @@
 cryptography==2.8
-Django==2.2.7
+Django==2.2.8
 djangorestframework==3.10.3
 drf-yasg==1.17.0
 psycopg2-binary==2.8.4
