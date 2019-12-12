@@ -5,7 +5,7 @@ from typing import List
 from typing import Tuple
 from typing import Union
 
-ALLOWED_HOSTS: List[str] = ['3.124.216.14']
+ALLOWED_HOSTS: List[str] = ['*']  # On develop only
 
 ASYNCHRONOUS_SERVICE_URL: str = 'http://pitter_async:8118/api/pitter/v1/recognize'
 

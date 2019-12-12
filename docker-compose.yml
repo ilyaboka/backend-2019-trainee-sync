@@ -4,6 +4,8 @@ services:
     build: ../backend-2019-trainee-async
     env_file:
       - ../backend-2019-trainee-async/local.env
+    ports:
+      - 8118:8118
   pitter_sync:
     build: .
     env_file:
@@ -13,14 +15,14 @@ services:
       - postgresql
     ports:
       - 8000:8000
-    volumes:
-      - /var/www/pitter/audio:/var/www/audio
   postgresql:
     image: postgres
     environment:
       POSTGRES_PASSWORD: 'postgres'
     volumes:
       - pitter_sync_postgresql:/var/lib/postgresql
+    ports:
+      - 5432:5432
 
 volumes:
   pitter_sync_postgresql:
