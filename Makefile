@@ -28,3 +28,6 @@ test:
 up:
 	docker-compose pull
 	docker-compose up --build -d
+
+
+.PHONY: down format lint local test up
