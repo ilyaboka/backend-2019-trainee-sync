@@ -1,6 +1,6 @@
 cryptography==2.8
 Django==2.2.13
-djangorestframework==3.10.3
+djangorestframework==3.11.2
 drf-yasg==1.17.0
 psycopg2-binary==2.8.4
 PyJWT==1.7.1
