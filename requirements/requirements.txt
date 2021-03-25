@@ -5,5 +5,5 @@ drf-yasg==1.17.0
 psycopg2-binary==2.8.4
 PyJWT==1.7.1
 python-magic==0.4.15
-PyYAML==5.1.2
+PyYAML==5.4
 requests==2.22.0
